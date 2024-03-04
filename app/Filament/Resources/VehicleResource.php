@@ -4,11 +4,16 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\VehicleResource\Pages;
 use App\Filament\Resources\VehicleResource\RelationManagers;
+use App\Models\User;
 use App\Models\Vehicle;
 use Filament\Forms;
+use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -22,52 +27,88 @@ class VehicleResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $users = User::pluck('name', 'id')->toArray();
         return $form
+
             ->schema([
-                Forms\Components\TextInput::make('marca')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('modelo')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('year')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('type')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('passenger_capacity')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('luggage_capacity')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('cost_per_day')
-                    ->required()
-                    ->numeric(),
+                Group::make()
+                    ->schema([
+                        Section::make('')
+                            ->schema([
+                                Forms\Components\TextInput::make('marca')->label('Marca ')
+                                    ->required()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('modelo')->label('Modelo')
+                                    ->required()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('year')->label('Año')
+                                    ->required(),
+                                    
+                                Forms\Components\TextInput::make('type')->label('Tipo')
+                                    ->required()
+                                    ->maxLength(255),
+                            ])
+                    ]),
+                Forms\Components\Group::make()
+                    ->schema([
+                        Section::make('')
+                            ->schema([
+                                Forms\Components\TextInput::make('passenger_capacity')->label('Capasidad de Pasagero')
+                                    ->required()
+                                    ->numeric(),
+                                Forms\Components\TextInput::make('luggage_capacity')->label('Capasidad de Equipaje')
+                                    ->required()
+                                    ->numeric(),
+                                Forms\Components\TextInput::make('cost_per_day')->label('Costo por dia')
+                                    ->required()
+                                    ->numeric(),
+                                Select::make('userId')
+                                    ->label('Chefer')
+                                    ->options($users),
+                            ])
+                    ]),
+
+                Group::make()
+                    ->schema([
+                        Section::make('')
+                            ->schema([
+                                Forms\Components\FileUpload::make('image')->label('Imagen del Vehiculo')
+                                    ->image()
+                                    ->required()
+                                    ->directory('vehicles'),
+                            ])
+                    ])
             ]);
+
+
+
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('users.name')->label('Chofer')
+                ->searchable(),
                 Tables\Columns\TextColumn::make('marca')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('modelo')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('year')
+                Tables\Columns\TextColumn::make('year')->label('Año')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('type')
+                Tables\Columns\TextColumn::make('type')->label('Tipo')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('passenger_capacity')
+                Tables\Columns\TextColumn::make('passenger_capacity')->label('Capasidad de Pasagero')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('luggage_capacity')
+                Tables\Columns\TextColumn::make('luggage_capacity')->label('Capasidad de Equipaje')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('cost_per_day')
+                    ImageColumn::make('image')
+                    ->height(80)
+                    ->circular(),
+                Tables\Columns\TextColumn::make('cost_per_day')->label('Costo por dia')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -83,7 +124,11 @@ class VehicleResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make()->color('info'),
+                    Tables\Actions\EditAction::make()->color('warning'),
+                    Tables\Actions\DeleteAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

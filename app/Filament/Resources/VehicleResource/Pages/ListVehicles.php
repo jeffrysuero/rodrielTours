@@ -13,7 +13,7 @@ class ListVehicles extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()->label('nuevo Vehiculo'),
+            Actions\CreateAction::make()->label('Nuevo Vehiculo'),
         ];
     }
 }

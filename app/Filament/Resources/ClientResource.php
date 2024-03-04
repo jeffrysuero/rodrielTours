@@ -6,6 +6,8 @@ use App\Filament\Resources\ClientResource\Pages;
 use App\Filament\Resources\ClientResource\RelationManagers;
 use App\Models\Client;
 use Filament\Forms;
+use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -24,23 +26,39 @@ class ClientResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('lastName')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('phone')
-                    ->tel()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('address')
-                    ->required()
-                    ->maxLength(255),
+                Group::make()
+                    ->schema([
+                        Section::make('')
+                            ->schema([
+                                Forms\Components\TextInput::make('name')->label('Nombre')
+                                    ->required()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('lastName')->label('Apellidos')
+                                    ->required()
+                                    ->maxLength(255),
+                            ]),
+                    ]),
+                Group::make()
+                    ->schema([
+                        Section::make('')
+                            ->schema([
+                                Forms\Components\TextInput::make('email')
+                                    ->email()
+                                    ->required()
+                                    ->unique()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('phone')->label('Telefono')
+                                    ->tel()
+                                    ->required()
+                                    ->unique()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('address')->label('Direccion')
+                                    ->required()
+                                    ->maxLength(255),
+                            ])
+                    ])
+
+
             ]);
     }
 
@@ -71,7 +89,11 @@ class ClientResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make()->color('info'),
+                    Tables\Actions\EditAction::make()->color('warning'),
+                    Tables\Actions\DeleteAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -9,15 +9,15 @@ class Reservation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['client_id', 'vehicle_id', 'start_date', 'end_date', 'total_cost'];
+    protected $fillable = ['clientId', 'vehicleId', 'start_date', 'end_date', 'total_cost'];
 
     public function client()
     {
-        return $this->belongsTo('App\Models\Client');
+        return $this->belongsTo(Client::class,'clientId');
     }
 
     public function vehicle()
     {
-        return $this->belongsTo('App\Models\Vehicle');
+        return $this->belongsTo(Vehicle::class,'vehicleId');
     }
 }
