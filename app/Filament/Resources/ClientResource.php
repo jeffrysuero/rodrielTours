@@ -36,6 +36,8 @@ class ClientResource extends Resource
                                 Forms\Components\TextInput::make('lastName')->label('Apellidos')
                                     ->required()
                                     ->maxLength(255),
+                                Forms\Components\DateTimePicker::make('arrivalDate')->label('Fecha de llegada')
+                                    ->required(),
                             ]),
                     ]),
                 Group::make()
@@ -44,21 +46,40 @@ class ClientResource extends Resource
                             ->schema([
                                 Forms\Components\TextInput::make('email')
                                     ->email()
+                                    ->unique(ignoreRecord: true)
                                     ->required()
-                                    ->unique()
                                     ->maxLength(255),
                                 Forms\Components\TextInput::make('phone')->label('Telefono')
                                     ->tel()
+                                    ->unique(ignoreRecord: true)
                                     ->required()
-                                    ->unique()
+                                    ->maxValue(15)
                                     ->maxLength(255),
-                                Forms\Components\TextInput::make('address')->label('Direccion')
+                                Forms\Components\TextInput::make('num_air')->label('Numero del Vuelo')
                                     ->required()
                                     ->maxLength(255),
                             ])
+                    ]),
+
+                Group::make()
+                    ->schema([
+                        Section::make('')
+                            ->schema([
+                                Forms\Components\MarkdownEditor::make('airport')->label('Aeropuerto')
+                                    ->required()
+                                    ->maxLength(255),
+                            ])
+                    ]),
+                Group::make()
+                    ->schema([
+                        Section::make('')
+                            ->schema([
+
+                                Forms\Components\MarkdownEditor::make('hotel')->label('Hotel')
+                                    ->required()
+                                    ->maxLength(255)
+                            ])
                     ])
-
-
             ]);
     }
 
@@ -66,15 +87,17 @@ class ClientResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                Tables\Columns\TextColumn::make('name')->label('Nombre')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('lastName')
+                Tables\Columns\TextColumn::make('lastName')->label('Apellido')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email')
+                Tables\Columns\TextColumn::make('email')->label('Email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('phone')
+                Tables\Columns\TextColumn::make('phone')->label('Telefono')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('address')
+                Tables\Columns\TextColumn::make('airport')->label('Aero Puerto')
+                    ->searchable(),
+                    Tables\Columns\TextColumn::make('num_air')->label('Numero de Vuelo')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

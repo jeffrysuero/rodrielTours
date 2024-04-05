@@ -13,7 +13,7 @@ class ListReservations extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()->label('Nueva Reservacion'),
+            Actions\CreateAction::make()->label('Nueva Reservacion')->icon('heroicon-m-plus-circle'),
         ];
     }
 }

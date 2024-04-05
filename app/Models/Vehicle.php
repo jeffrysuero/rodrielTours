@@ -9,7 +9,7 @@ class Vehicle extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['marca', 'userId','modelo','image', 'year', 'type', 'passenger_capacity', 'luggage_capacity', 'cost_per_day'];
+    protected $fillable = ['marca', 'userId','modelo','image', 'type', 'passenger_capacity', 'luggage_capacity', 'placa','color'];
 
     public function users()
     {

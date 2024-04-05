@@ -15,16 +15,20 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Support\Enums\FontWeight;
+use Filament\Tables\Columns\IconColumn;
 
 class ReservationResource extends Resource
 {
     protected static ?string $model = Reservation::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
-    protected static ?string $navigationLabel = 'Reservaciones';
+    protected static ?string $navigationLabel = 'Servicios';
 
     public static function form(Form $form): Form
     {
@@ -44,14 +48,22 @@ class ReservationResource extends Resource
                             ->schema([
                                 Select::make('clientId')
                                     ->label('Cliente')
+                                    ->searchable()
+                                    ->noSearchResultsMessage('Cliente no encontrado')
                                     ->options($client),
                                 Select::make('vehicleId')
-                                    ->label('Vehiculo')
+                                    ->label('Vehiculo/Chofer')
+                                    ->searchable()
+                                    ->noSearchResultsMessage('Chofer no encontrado')
                                     ->options($vehicle),
-                                Forms\Components\DateTimePicker::make('start_date')->label('Fecha de Inicio')
+                                Forms\Components\TextInput::make('min_KM')->label('Minuto Y Kilometro')
                                     ->required(),
-                                Forms\Components\DateTimePicker::make('end_date')->label('Fecha Final')
-                                    ->required(),
+                                Forms\Components\TextInput::make('suitcases')->label('Maletas')
+                                    ->required()
+                                    ->numeric(),
+                                Forms\Components\TextInput::make('numPeople')->label('Numero de Persona')
+                                    ->required()
+                                    ->numeric(),
                                 Forms\Components\TextInput::make('total_cost')->label('Costo Total')
                                     ->required()
                                     ->numeric(),
@@ -62,37 +74,29 @@ class ReservationResource extends Resource
             ]);
     }
 
+
+
+
     public static function table(Table $table): Table
     {
-        return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('client.name')->label('Cliente')
-                    ->searchable()
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('vehicle.marca')->label('Vehiculo')
-                    ->searchable()
-                    ->numeric()
-                    ->sortable(),
-
-                Tables\Columns\TextColumn::make('start_date')->label('Fecha de Inicio')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('end_date')->label('Fecha Final')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('total_cost')->label('Costo Total')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
+        return $table->columns([
+            Tables\Columns\Layout\Panel::make([
+                Tables\Columns\TextColumn::make('client.airport')->icon('heroicon-m-paper-airplane'),
+                Tables\Columns\TextColumn::make('client.hotel')->icon('heroicon-m-building-office')->alignEnd(),
+                Tables\Columns\TextColumn::make('client.arrivalDate')->icon('heroicon-m-clock')->alignLeft(),
+                Tables\Columns\TextColumn::make('client.num_air')->icon('heroicon-m-document-text')->alignEnd(),
+                Tables\Columns\TextColumn::make('min_KM')->icon('heroicon-m-chart-bar-square'),
+                Tables\Columns\TextColumn::make('suitcases')->icon('heroicon-m-inbox-stack')->alignEnd(),
+                Tables\Columns\TextColumn::make('numPeople')->icon('heroicon-m-user-group'),
+                Tables\Columns\TextColumn::make('client.name')->icon('heroicon-m-user-circle')->alignEnd(),
+                Tables\Columns\TextColumn::make('client.phone')->icon('heroicon-m-phone'),
+                Tables\Columns\TextColumn::make('total_cost')->icon('heroicon-m-currency-dollar')->alignEnd(),
+                ImageColumn::make('vehicle.image')->label('Vehiculo')->height(90)->circular(),
+                Tables\Columns\TextColumn::make('vehicle.users.name')->icon('heroicon-m-academic-cap')->alignEnd(),
+                Tables\Columns\TextColumn::make('vehicle.placa')->icon('heroicon-m-bars-3'),
+            ]),
+        ])
+           
             ->filters([
                 //
             ])
@@ -124,5 +128,17 @@ class ReservationResource extends Resource
             'create' => Pages\CreateReservation::route('/create'),
             'edit' => Pages\EditReservation::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQueryTableDashboard(): Builder
+    {
+        $user = Auth()->user();
+
+        if ($user->roles[0]->name === 'Administrador') {
+            return parent::getEloquentQuery();
+        } else {
+
+            return parent::getEloquentQuery();
+        }
     }
 }

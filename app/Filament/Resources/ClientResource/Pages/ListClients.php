@@ -13,7 +13,7 @@ class ListClients extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()->label('nuevo Cliente'),
+            Actions\CreateAction::make()->label('Nuevo Cliente')->icon('heroicon-m-plus-circle'),
         ];
     }
 }

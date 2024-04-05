@@ -17,6 +17,7 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Support\Enums\FontWeight;
 
 class VehicleResource extends Resource
 {
@@ -41,9 +42,9 @@ class VehicleResource extends Resource
                                 Forms\Components\TextInput::make('modelo')->label('Modelo')
                                     ->required()
                                     ->maxLength(255),
-                                Forms\Components\TextInput::make('year')->label('Año')
+                                Forms\Components\TextInput::make('color')->label('Color')
                                     ->required(),
-                                    
+
                                 Forms\Components\TextInput::make('type')->label('Tipo')
                                     ->required()
                                     ->maxLength(255),
@@ -59,10 +60,11 @@ class VehicleResource extends Resource
                                 Forms\Components\TextInput::make('luggage_capacity')->label('Capasidad de Equipaje')
                                     ->required()
                                     ->numeric(),
-                                Forms\Components\TextInput::make('cost_per_day')->label('Costo por dia')
-                                    ->required()
-                                    ->numeric(),
+                                Forms\Components\TextInput::make('placa')->label('Placa')
+                                    ->required(),
+
                                 Select::make('userId')
+                                    ->required()
                                     ->label('Chefer')
                                     ->options($users),
                             ])
@@ -79,36 +81,34 @@ class VehicleResource extends Resource
                             ])
                     ])
             ]);
-
-
-
     }
 
     public static function table(Table $table): Table
     {
         return $table
+            
             ->columns([
                 Tables\Columns\TextColumn::make('users.name')->label('Chofer')
-                ->searchable(),
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('marca')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('modelo')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('year')->label('Año')
+                Tables\Columns\TextColumn::make('color')->label('Color')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('type')->label('Tipo')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('passenger_capacity')->label('Capasidad de Pasagero')
+                Tables\Columns\TextColumn::make('passenger_capacity')->label('Cap.Pasagero')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('luggage_capacity')->label('Capasidad de Equipaje')
+                Tables\Columns\TextColumn::make('luggage_capacity')->label('Cap.Equipaje')
                     ->numeric()
                     ->sortable(),
-                    ImageColumn::make('image')
-                    ->height(80)
+                ImageColumn::make('image')
+                    ->height(90)
                     ->circular(),
-                Tables\Columns\TextColumn::make('cost_per_day')->label('Costo por dia')
+                Tables\Columns\TextColumn::make('placa')->label('Placa')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
