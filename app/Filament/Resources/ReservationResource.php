@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\IconColumn;
+// use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
 
 class ReservationResource extends Resource
 {
@@ -51,11 +52,13 @@ class ReservationResource extends Resource
                                     ->searchable()
                                     ->noSearchResultsMessage('Cliente no encontrado')
                                     ->options($client),
+                                    
                                 Select::make('vehicleId')
                                     ->label('Vehiculo/Chofer')
                                     ->searchable()
                                     ->noSearchResultsMessage('Chofer no encontrado')
                                     ->options($vehicle),
+
                                 Forms\Components\TextInput::make('min_KM')->label('Minuto Y Kilometro')
                                     ->required(),
                                 Forms\Components\TextInput::make('suitcases')->label('Maletas')
@@ -79,39 +82,204 @@ class ReservationResource extends Resource
 
     public static function table(Table $table): Table
     {
+
+        $user = Auth()->user();
+        if ($user->roles[0]->name === 'Conductores') {
+            return $table->columns([
+                Tables\Columns\Layout\Panel::make([
+                    Tables\Columns\TextColumn::make('client.airport')
+                        ->icon('heroicon-m-paper-airplane')
+                        ->iconColor('primary'),
+                    Tables\Columns\TextColumn::make('client.hotel')->icon('heroicon-m-building-office')->iconColor('primary'),
+                    Tables\Columns\TextColumn::make('client.arrivalDate')
+                        ->icon('heroicon-m-clock')
+                        ->iconColor('primary'),
+    
+                    Tables\Columns\TextColumn::make('client.num_air')
+                        ->icon('heroicon-m-document-text')
+                        ->iconColor('primary')
+                        ->searchable(),
+    
+                    Tables\Columns\TextColumn::make('min_KM')
+                        ->icon('heroicon-m-chart-bar-square')
+                        ->iconColor('primary')
+                        ->searchable(),
+    
+                    Tables\Columns\TextColumn::make('suitcases')
+                        ->icon('heroicon-m-inbox-stack')
+                        ->iconColor('primary')
+                        ->searchable(),
+    
+                    Tables\Columns\TextColumn::make('numPeople')
+                        ->icon('heroicon-m-user-group')
+                        ->iconColor('primary')
+                        ->searchable(),
+    
+                    Tables\Columns\TextColumn::make('client.name')
+                        ->icon('heroicon-m-user-circle')
+                        ->iconColor('primary')
+                        ->searchable(),
+    
+                    Tables\Columns\TextColumn::make('client.phone')->icon('heroicon-m-phone')->iconColor('primary')->searchable(),
+                    // Tables\Columns\TextColumn::make('total_cost')->icon('heroicon-m-currency-dollar')
+                    //     ->alignEnd()
+                    //     ->iconColor('warning'),
+    
+                    ImageColumn::make('vehicle.image')->label('Vehiculo')->height(90)->circular()->alignCenter(),
+                    Tables\Columns\TextColumn::make('vehicle.placa')
+                        ->icon('heroicon-m-bars-3')
+                        ->alignCenter()
+                        ->iconColor('primary')
+                        ->searchable(),
+    
+    
+                    ImageColumn::make('vehicle.users.image')->label('Vehiculo')->height(90)->circular()->alignCenter(),
+    
+                    Tables\Columns\TextColumn::make('vehicle.users.name')
+                        ->icon('heroicon-m-academic-cap')
+                        ->alignCenter()
+                        ->iconColor('primary')
+                        ->searchable(),
+    
+                    Tables\Columns\TextColumn::make('status')->icon('heroicon-m-swatch')
+                        ->iconColor('success'),
+                ]),
+            ])
+    
+                ->filters([
+                    //
+                ])
+                ->contentGrid([
+                    'md' => 1,
+                    'xl' => 2,
+                ])
+                ->paginated([
+                    18,
+                    36,
+                    72,
+                    'all',
+                ])
+                ->actions([
+                    Tables\Actions\Action::make('url')
+                        ->label('Visit link')
+                        ->icon('heroicon-m-arrow-top-right-on-square')
+                        ->color('gray')
+                        ->url(fn (Reservation $record): string => '#' . urlencode($record->url)),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                ])
+                // ->actions([
+    
+                //     Tables\Actions\ActionGroup::make([
+                //         Tables\Actions\ViewAction::make()->color('info'),
+                //         Tables\Actions\EditAction::make()->color('warning'),
+                //         Tables\Actions\DeleteAction::make(),
+                //     ])
+                // ])
+                ->bulkActions([
+                    // Tables\Actions\BulkActionGroup::make([
+                    //     Tables\Actions\DeleteBulkAction::make(),
+                    // ]),
+                ]);
+        }else{
+
         return $table->columns([
             Tables\Columns\Layout\Panel::make([
-                Tables\Columns\TextColumn::make('client.airport')->icon('heroicon-m-paper-airplane'),
-                Tables\Columns\TextColumn::make('client.hotel')->icon('heroicon-m-building-office')->alignEnd(),
-                Tables\Columns\TextColumn::make('client.arrivalDate')->icon('heroicon-m-clock')->alignLeft(),
-                Tables\Columns\TextColumn::make('client.num_air')->icon('heroicon-m-document-text')->alignEnd(),
-                Tables\Columns\TextColumn::make('min_KM')->icon('heroicon-m-chart-bar-square'),
-                Tables\Columns\TextColumn::make('suitcases')->icon('heroicon-m-inbox-stack')->alignEnd(),
-                Tables\Columns\TextColumn::make('numPeople')->icon('heroicon-m-user-group'),
-                Tables\Columns\TextColumn::make('client.name')->icon('heroicon-m-user-circle')->alignEnd(),
-                Tables\Columns\TextColumn::make('client.phone')->icon('heroicon-m-phone'),
-                Tables\Columns\TextColumn::make('total_cost')->icon('heroicon-m-currency-dollar')->alignEnd(),
-                ImageColumn::make('vehicle.image')->label('Vehiculo')->height(90)->circular(),
-                Tables\Columns\TextColumn::make('vehicle.users.name')->icon('heroicon-m-academic-cap')->alignEnd(),
-                Tables\Columns\TextColumn::make('vehicle.placa')->icon('heroicon-m-bars-3'),
+                Tables\Columns\TextColumn::make('client.airport')
+                    ->icon('heroicon-m-paper-airplane')
+                    ->iconColor('primary'),
+                Tables\Columns\TextColumn::make('client.hotel')->icon('heroicon-m-building-office')->iconColor('primary'),
+                Tables\Columns\TextColumn::make('client.arrivalDate')
+                    ->icon('heroicon-m-clock')
+                    ->iconColor('primary'),
+
+                Tables\Columns\TextColumn::make('client.num_air')
+                    ->icon('heroicon-m-document-text')
+                    ->iconColor('primary')
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('min_KM')
+                    ->icon('heroicon-m-chart-bar-square')
+                    ->iconColor('primary')
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('suitcases')
+                    ->icon('heroicon-m-inbox-stack')
+                    ->iconColor('primary')
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('numPeople')
+                    ->icon('heroicon-m-user-group')
+                    ->iconColor('primary')
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('client.name')
+                    ->icon('heroicon-m-user-circle')
+                    ->iconColor('primary')
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('client.phone')->icon('heroicon-m-phone')->iconColor('primary')->searchable(),
+                Tables\Columns\TextColumn::make('total_cost')->icon('heroicon-m-currency-dollar')
+                    ->alignEnd()
+                    ->iconColor('warning'),
+
+                ImageColumn::make('vehicle.image')->label('Vehiculo')->height(90)->circular()->alignCenter(),
+                Tables\Columns\TextColumn::make('vehicle.placa')
+                    ->icon('heroicon-m-bars-3')
+                    ->alignCenter()
+                    ->iconColor('primary')
+                    ->searchable(),
+
+
+                ImageColumn::make('vehicle.users.image')->label('Vehiculo')->height(90)->circular()->alignCenter(),
+
+                Tables\Columns\TextColumn::make('vehicle.users.name')
+                    ->icon('heroicon-m-academic-cap')
+                    ->alignCenter()
+                    ->iconColor('primary')
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('status')->icon('heroicon-m-swatch')
+                    ->iconColor('success'),
             ]),
         ])
-           
+
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\ActionGroup::make([
-                    Tables\Actions\ViewAction::make()->color('info'),
-                    Tables\Actions\EditAction::make()->color('warning'),
-                    Tables\Actions\DeleteAction::make(),
-                ])
+            ->contentGrid([
+                'md' => 1,
+                'xl' => 2,
             ])
+            ->paginated([
+                18,
+                36,
+                72,
+                'all',
+            ])
+            ->actions([
+                Tables\Actions\Action::make('url')
+                    ->label('Visit link')
+                    ->icon('heroicon-m-arrow-top-right-on-square')
+                    ->color('gray')
+                    ->url(fn (Reservation $record): string => '#' . urlencode($record->url)),
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+            ])
+            // ->actions([
+
+            //     Tables\Actions\ActionGroup::make([
+            //         Tables\Actions\ViewAction::make()->color('info'),
+            //         Tables\Actions\EditAction::make()->color('warning'),
+            //         Tables\Actions\DeleteAction::make(),
+            //     ])
+            // ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ]);
+        }
     }
 
     public static function getRelations(): array
@@ -140,5 +308,26 @@ class ReservationResource extends Resource
 
             return parent::getEloquentQuery();
         }
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $user = Auth()->user();
+        $vehicle = Vehicle::all()->where('userId', $user->id)->first();
+        // dd($vehicle);
+
+        if ($user->roles[0]->name === 'Administrador') {
+            return parent::getEloquentQuery();
+        }
+
+        // $franchise = Franchise::where('id', $user->franchiseId)->first();
+        // $service = Service::where('id', $franchise->serviceId)->first();
+
+        // if ($service  && $service->name === 'stamp') {
+        //     return parent::getEloquentQuery();
+        // }
+
+        // return parent::getEloquentQuery()->where('franchiseId');
+        return parent::getEloquentQuery()->where('vehicleId',$vehicle->id);
     }
 }

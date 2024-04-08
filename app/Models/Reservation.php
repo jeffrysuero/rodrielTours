@@ -9,7 +9,7 @@ class Reservation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['clientId', 'vehicleId', 'min_KM', 'suitcases', 'total_cost','numPeople'];
+    protected $fillable = ['clientId', 'vehicleId', 'min_KM', 'suitcases', 'total_cost','numPeople','status','url'];
 
     public function client()
     {
@@ -19,5 +19,10 @@ class Reservation extends Model
     public function vehicle()
     {
         return $this->belongsTo(Vehicle::class,'vehicleId');
+    }
+
+    public static function getStatusOptions()
+    {
+        return ['SIN ASIGNAR' => 'SIN ASIGNAR', 'COMPLETADO' => 'COMPLETADO', 'CREADO' => 'CREADO'];
     }
 }

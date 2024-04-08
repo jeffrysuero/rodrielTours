@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('reservations', function (Blueprint $table) {
-            
-            $table->dropForeign('reservations_vehicleid_foreign');
-            $table->dropColumn('vehicleId');
+            $table->integer('vehicleId')->nullable();
+            $table->enum('status',['SIN ASIGNAR', 'COMPLETADO','CREADO'])->default('SIN ASIGNAR');
+            $table->text('url')->nullable();
         });
     }
 
@@ -24,9 +24,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('reservations', function (Blueprint $table) {
-            $table->unsignedBigInteger('vehicleId');
-            $table->foreign('vehicleId')->references('id')->on('vehicles')->cascadeOnUpdate()->cascadeOnDelete();
-          
+            $table->dropColumn('vehicleId')->nullable();
+            $table->dropColumn('status')->nullable();
+            $table->dropColumn('url')->nullable();
         });
     }
 };
