@@ -21,18 +21,39 @@ class EditReservation extends EditRecord
     protected function getRedirectUrl(): string
     {
 
-        $data = Reservation::whereNotNull('vehicleId')->get();
+        // $data = Reservation::whereNotNull('vehicleId')->get();
 
-        foreach ($data as $dato) {
-            $dato->status = 'CREADO';
-            $dato->save();
+        // foreach ($data as $dato) {
+        //     $dato->status = 'ASIGNADO';
+        //     $dato->save();
+        // }
+
+        // $data1 = Reservation::whereNull('vehicleId')->get();
+
+        // foreach ($data1 as $dato1) {
+        //     $dato1->status = 'SIN ASIGNAR';
+        //     $dato1->save();
+        // }
+
+        $reservations = Reservation::all();
+
+        foreach ($reservations as $reservation) {
+            if ($reservation->status !== 'COMPLETADO') {
+                // Si el estado no es "COMPLETADO", cambia el estado según si hay un vehículo asignado o no
+                if ($reservation->vehicleId !== null) {
+                    // Si hay un vehículo asignado, establecer el estado como 'ASIGNADO'
+                    $reservation->status = 'ASIGNADO';
+                } else {
+                    // Si no hay vehículo asignado, establecer el estado como 'SIN ASIGNAR'
+                    $reservation->status = 'SIN ASIGNAR';
+                }
+                
+                // Guardar los cambios en la reserva
+                $reservation->save();
+            }
+            // Si el estado es "COMPLETADO", no hagas ningún cambio
         }
 
-        $data1 = Reservation::whereNull('vehicleId')->get();
-        foreach ($data1 as $dato1) {
-            $dato1->status = 'SIN ASIGNAR';
-            $dato1->save();
-        }
 
         return $this->getResource()::getUrl('index');
     }

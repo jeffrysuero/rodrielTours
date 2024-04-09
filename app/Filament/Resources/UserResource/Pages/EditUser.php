@@ -13,7 +13,13 @@ class EditUser extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make() 
+            ->label('Eliminar')
+            ->icon('heroicon-m-trash')
+            ->requiresConfirmation()
+            ->modalHeading('Eliminar Este Usuario')
+            ->modalDescription('Esta seguro de Eliminar este Usuario ?')
+            ->modalSubmitActionLabel('Si, eliminar'),
         ];
 
         

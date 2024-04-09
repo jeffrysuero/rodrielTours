@@ -8,6 +8,7 @@ use App\Models\Client;
 use App\Models\Reservation;
 use App\Models\User;
 use App\Models\Vehicle;
+// use CustomUpdateAction;
 use Filament\Forms;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
@@ -52,7 +53,7 @@ class ReservationResource extends Resource
                                     ->searchable()
                                     ->noSearchResultsMessage('Cliente no encontrado')
                                     ->options($client),
-                                    
+
                                 Select::make('vehicleId')
                                     ->label('Vehiculo/Chofer')
                                     ->searchable()
@@ -84,6 +85,7 @@ class ReservationResource extends Resource
     {
 
         $user = Auth()->user();
+
         if ($user->roles[0]->name === 'Conductores') {
             return $table->columns([
                 Tables\Columns\Layout\Panel::make([
@@ -101,7 +103,7 @@ class ReservationResource extends Resource
                         ->searchable(),
     
                     Tables\Columns\TextColumn::make('min_KM')
-                        ->icon('heroicon-m-chart-bar-square')
+                        ->icon('heroicon-m-arrow-trending-up')
                         ->iconColor('primary')
                         ->searchable(),
     
@@ -117,7 +119,7 @@ class ReservationResource extends Resource
     
                     Tables\Columns\TextColumn::make('client.name')
                         ->icon('heroicon-m-user-circle')
-                        ->iconColor('primary')
+                        ->iconColor('success')
                         ->searchable(),
     
                     Tables\Columns\TextColumn::make('client.phone')->icon('heroicon-m-phone')->iconColor('primary')->searchable(),
@@ -136,7 +138,7 @@ class ReservationResource extends Resource
                     ImageColumn::make('vehicle.users.image')->label('Vehiculo')->height(90)->circular()->alignCenter(),
     
                     Tables\Columns\TextColumn::make('vehicle.users.name')
-                        ->icon('heroicon-m-academic-cap')
+                        ->icon('heroicon-m-identification')
                         ->alignCenter()
                         ->iconColor('primary')
                         ->searchable(),
@@ -165,8 +167,29 @@ class ReservationResource extends Resource
                         ->icon('heroicon-m-arrow-top-right-on-square')
                         ->color('gray')
                         ->url(fn (Reservation $record): string => '#' . urlencode($record->url)),
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make(),
+                        Tables\Actions\EditAction::make()
+                        ->hidden(static function ($record) {
+                            return $record->status ==='COMPLETADO';
+                        }),
+        
+                        Tables\Actions\DeleteAction::make()
+                        ->hidden(static function ($record) {
+                            return $record->status ==='COMPLETADO';
+                        }),
+        
+        
+                        Tables\Actions\CustomUpdateAction::make()
+                        ->label('Iniciar Viaje')
+                        ->recordTitle('Esta seguro de Iniciar el Viaje')
+                        ->hidden(static function ($record) {
+                            return in_array($record->status, ['COMPLETADO', 'EN PROGRESO','SIN ASIGNAR']);
+                        }),
+                        Tables\Actions\CompletedService::make()
+                            ->label('Terminar Servicio')
+                            ->recordTitle('Esta seguro de Terminar el Viaje')
+                            ->hidden(static function ($record) {
+                                return in_array($record->status, ['COMPLETADO', 'ASIGNADO','SIN ASIGNAR']);
+                            }),
                 ])
                 // ->actions([
     
@@ -199,23 +222,23 @@ class ReservationResource extends Resource
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('min_KM')
-                    ->icon('heroicon-m-chart-bar-square')
+                    ->icon('heroicon-m-arrow-trending-up')
                     ->iconColor('primary')
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('suitcases')
                     ->icon('heroicon-m-inbox-stack')
-                    ->iconColor('primary')
+                    ->iconColor('success')
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('numPeople')
                     ->icon('heroicon-m-user-group')
-                    ->iconColor('primary')
+                    ->iconColor('success')
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('client.name')
                     ->icon('heroicon-m-user-circle')
-                    ->iconColor('primary')
+                    ->iconColor('success')
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('client.phone')->icon('heroicon-m-phone')->iconColor('primary')->searchable(),
@@ -223,21 +246,20 @@ class ReservationResource extends Resource
                     ->alignEnd()
                     ->iconColor('warning'),
 
-                ImageColumn::make('vehicle.image')->label('Vehiculo')->height(90)->circular()->alignCenter(),
-                Tables\Columns\TextColumn::make('vehicle.placa')
-                    ->icon('heroicon-m-bars-3')
-                    ->alignCenter()
-                    ->iconColor('primary')
-                    ->searchable(),
-
-
                 ImageColumn::make('vehicle.users.image')->label('Vehiculo')->height(90)->circular()->alignCenter(),
 
                 Tables\Columns\TextColumn::make('vehicle.users.name')
-                    ->icon('heroicon-m-academic-cap')
+                    ->icon('heroicon-m-identification')
                     ->alignCenter()
                     ->iconColor('primary')
                     ->searchable(),
+
+                    ImageColumn::make('vehicle.image')->label('Vehiculo')->height(90)->circular()->alignCenter(),
+                    Tables\Columns\TextColumn::make('vehicle.placa')
+                        ->icon('heroicon-m-bars-3')
+                        ->alignCenter()
+                        ->iconColor('primary')
+                        ->searchable(),
 
                 Tables\Columns\TextColumn::make('status')->icon('heroicon-m-swatch')
                     ->iconColor('success'),
@@ -263,17 +285,33 @@ class ReservationResource extends Resource
                     ->icon('heroicon-m-arrow-top-right-on-square')
                     ->color('gray')
                     ->url(fn (Reservation $record): string => '#' . urlencode($record->url)),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
-            // ->actions([
+                Tables\Actions\EditAction::make()
+                ->hidden(static function ($record) {
+                    return $record->status ==='COMPLETADO';
+                }),
 
-            //     Tables\Actions\ActionGroup::make([
-            //         Tables\Actions\ViewAction::make()->color('info'),
-            //         Tables\Actions\EditAction::make()->color('warning'),
-            //         Tables\Actions\DeleteAction::make(),
-            //     ])
-            // ])
+                Tables\Actions\DeleteAction::make()
+                ->hidden(static function ($record) {
+                    return $record->status ==='COMPLETADO';
+                }),
+
+
+                Tables\Actions\CustomUpdateAction::make()
+                ->label('Iniciar Viaje')
+                ->recordTitle('Esta seguro de Iniciar el Viaje')
+                ->hidden(static function ($record) {
+                    return in_array($record->status, ['COMPLETADO', 'EN PROGRESO','SIN ASIGNAR']);
+                }),
+                Tables\Actions\CompletedService::make()
+                    ->label('Terminar Servicio')
+                    ->recordTitle('Esta seguro de Terminar el Viaje')
+                    ->hidden(static function ($record) {
+                        return in_array($record->status, ['COMPLETADO', 'ASIGNADO','SIN ASIGNAR']);
+                    }),
+
+                
+            ])
+           
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([
                 //     Tables\Actions\DeleteBulkAction::make(),
@@ -295,6 +333,7 @@ class ReservationResource extends Resource
             'index' => Pages\ListReservations::route('/'),
             'create' => Pages\CreateReservation::route('/create'),
             'edit' => Pages\EditReservation::route('/{record}/edit'),
+            
         ];
     }
 
@@ -303,7 +342,7 @@ class ReservationResource extends Resource
         $user = Auth()->user();
 
         if ($user->roles[0]->name === 'Administrador') {
-            return parent::getEloquentQuery();
+            return parent::getEloquentQuery()->where('status','!=','COMPLETADO');
         } else {
 
             return parent::getEloquentQuery();

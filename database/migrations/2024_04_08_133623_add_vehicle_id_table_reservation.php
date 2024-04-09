@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('reservations', function (Blueprint $table) {
             $table->integer('vehicleId')->nullable();
-            $table->enum('status',['SIN ASIGNAR', 'COMPLETADO','CREADO'])->default('SIN ASIGNAR');
+            $table->enum('status',['SIN ASIGNAR', 'COMPLETADO','ASIGNADO','EN PROGRESO'])->default('SIN ASIGNAR');
             $table->text('url')->nullable();
         });
     }

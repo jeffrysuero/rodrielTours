@@ -41,12 +41,12 @@ class ReservationOrders extends BaseWidget
                         ->numeric()
                         ->sortable(),
     
-                    Tables\Columns\TextColumn::make('start_date')->label('Fecha de Inicio')
-                        ->dateTime()
-                        ->sortable(),
-                    Tables\Columns\TextColumn::make('end_date')->label('Fecha Final')
-                        ->dateTime()
-                        ->sortable(),
+                    // Tables\Columns\TextColumn::make('start_date')->label('Fecha de Inicio')
+                    //     ->dateTime()
+                    //     ->sortable(),
+                    // Tables\Columns\TextColumn::make('end_date')->label('Fecha Final')
+                    //     ->dateTime()
+                    //     ->sortable(),
                     Tables\Columns\TextColumn::make('total_cost')->label('Costo Total')
                         ->numeric()
                         ->sortable(),
