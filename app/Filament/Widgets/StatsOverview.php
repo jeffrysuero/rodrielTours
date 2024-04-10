@@ -8,16 +8,45 @@ use App\Models\User;
 use App\Models\Vehicle;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Carbon\Carbon;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 
 class StatsOverview extends BaseWidget
 {
-    protected static ?string $pollingInterval = null;
-    protected static bool $isLazy = false;
+    use InteractsWithPageFilters;
+    // protected static ?string $pollingInterval = null;
+    // protected static bool $isLazy = false;
+    protected static ?int $sort = 0;
     protected function getStats(): array
     {
 
         $user = Auth()->user();
         $vehicle = Vehicle::all()->where('userId', $user->id)->first();
+
+
+        $startDate = !is_null($this->filters['startDate'] ?? null) ?
+            Carbon::parse($this->filters['startDate']) :
+            now()->startOfDay();
+
+        $endDate = !is_null($this->filters['endDate'] ?? null) ?
+            Carbon::parse($this->filters['endDate']) :
+            now()->endOfDay();
+
+        $monthlyTotal = Reservation::selectRaw('SUM(total_cost) as total, MONTH(created_at) as month')
+            ->groupBy('month')
+            ->get()
+            ->pluck('total', 'month')
+            ->toArray();
+
+        $labels = [];
+        $data = [];
+
+        for ($i = 1; $i <= 12; $i++) {
+            $monthName = Carbon::createFromFormat('!m', $i)->format('F');
+            $labels[] = $monthName;
+            $data[] = $monthlyTotal[$i] ?? 0;
+        }
+
 
         if ($user->roles[0]->name === 'Administrador') {
             return [
@@ -33,23 +62,33 @@ class StatsOverview extends BaseWidget
                     ->color('primary')
                     ->chart([6, 4, 9, 5, 3, 0, 7]),
 
-                Stat::make('Total por Servicios $', Reservation::sum('total_cost'))
+                Stat::make('Total por Servicios $', value(array_sum($data)))
                     ->description('Increasing Reservaciones')
                     ->descriptionIcon('heroicon-m-arrow-trending-up')
                     ->color('warning')
-                    ->chart([1, 9, 9, 8, 3, 7, 7]),
+                    ->chart($data),
 
-                Stat::make('Total Servicios Completados $', Reservation::where('status', 'COMPLETADO')->sum('total_cost'))
+                Stat::make('Total Servicios Completados $', Reservation::where('status', 'COMPLETADO')
+                    ->whereBetween('updated_at', [$startDate, $endDate])
+                    ->sum('total_cost'))
                     ->description('Increasing Reservaciones')
                     ->descriptionIcon('heroicon-m-arrow-trending-up')
                     ->color('success')
                     ->chart([1, 9, 9, 8, 3, 7, 7]),
 
-                Stat::make('Servicios Completados', Reservation::where('status', 'COMPLETADO')->count())
+                Stat::make('Servicios Completados', Reservation::where('status', 'COMPLETADO')
+                    ->whereBetween('updated_at', [$startDate, $endDate])
+                    ->count())
                     ->description('Servicios Completados')
                     ->descriptionIcon('heroicon-m-hand-thumb-up')
                     ->color('success')
-                    ->chart([1, 9, 9, 8, 3, 7, 7])
+                    ->chart([1, 9, 9, 8, 3, 7, 7]),
+
+                Stat::make(' ', "")
+                    ->description('')
+                    // ->descriptionIcon('heroicon-m-arrow-trending-up')
+                    ->color('primary')
+                    ->chart([2, 2, 2, 2, 2, 2, 2]),
             ];
         }
 
