@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\IconColumn;
 // use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
-
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 class ReservationResource extends Resource
 {
     protected static ?string $model = Reservation::class;
@@ -313,9 +313,10 @@ class ReservationResource extends Resource
             ])
            
             ->bulkActions([
-                // Tables\Actions\BulkActionGroup::make([
-                //     Tables\Actions\DeleteBulkAction::make(),
-                // ]),
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make()
+                ]),
             ]);
         }
     }
