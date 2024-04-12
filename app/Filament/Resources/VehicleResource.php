@@ -10,6 +10,7 @@ use Filament\Forms;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -19,6 +20,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Support\Enums\FontWeight;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use Filament\Resources\Pages\Page;
+use Filament\Infolists\Infolist;
+// use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components;
 
 class VehicleResource extends Resource
 {
@@ -46,9 +51,13 @@ class VehicleResource extends Resource
                                 Forms\Components\TextInput::make('color')->label('Color')
                                     ->required(),
 
-                                Forms\Components\TextInput::make('type')->label('Tipo')
+                                // Forms\Components\TextInput::make('type')->label('Tipo')
+                                //     ->required()
+                                //     ->maxLength(255),
+
+                                Forms\Components\TextInput::make('percentage')->label('Porcentage a pagar por viaje')
                                     ->required()
-                                    ->maxLength(255),
+                                    ->numeric(),
                             ])
                     ]),
                 Forms\Components\Group::make()
@@ -64,11 +73,18 @@ class VehicleResource extends Resource
                                 Forms\Components\TextInput::make('placa')->label('Placa')
                                     ->required(),
 
-                                Select::make('userId')
-                                    ->required()
-                                    ->label('Chefer')
+                                    Select::make('userId')
+                                    ->label('Chofer')
+                                    ->searchable()
+                                    ->noSearchResultsMessage('Chofer no encontrado')
                                     ->options($users),
-                            ])
+
+                                // ->label('Cliente')
+                                // ->searchable()
+                                // ->noSearchResultsMessage('Cliente no encontrado')
+                                // ->options($client),
+                            ]),
+
                     ]),
 
                 Group::make()
@@ -87,7 +103,7 @@ class VehicleResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            
+
             ->columns([
                 Tables\Columns\TextColumn::make('users.name')->label('Chofer')
                     ->searchable(),
@@ -125,11 +141,11 @@ class VehicleResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ActionGroup::make([
-                    Tables\Actions\ViewAction::make()->color('info'),
-                    Tables\Actions\EditAction::make()->color('warning'),
+                // Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make()->color('success')->label('pagar')->icon('heroicon-o-banknotes'),
+                    Tables\Actions\EditAction::make()->color('warning')->label('Editar'),
                     Tables\Actions\DeleteAction::make(),
-                ])
+                // ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -137,6 +153,64 @@ class VehicleResource extends Resource
                     ExportBulkAction::make()
                 ]),
             ]);
+    }
+
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Components\Section::make()
+                    ->schema([
+                        Components\Split::make([
+                            Components\Grid::make(2)
+                                ->schema([
+                                    Components\Group::make([
+                                        Components\TextEntry::make('users.name')->label('Nombre'),
+                                        Components\TextEntry::make('users.email')->label('Email'),
+                                        // Components\TextEntry::make('published_at')
+                                        //     ->badge()
+                                        //     ->date()
+                                        //     ->color('success'),
+                                    ]),
+                                    Components\Group::make([
+                                        Components\TextEntry::make(''),
+                                        Components\TextEntry::make(''),
+                                        // Components\SpatieTagsEntry::make('tags'),
+                                    ]),
+
+                                    Components\Group::make([
+                                        // Components\TextEntry::make('marca'),
+                                        // Components\TextEntry::make('modelo'),
+                                        // Components\SpatieTagsEntry::make('tags'),
+
+                                    ]),
+                                ]),
+                            Components\ImageEntry::make('users.image')
+                                ->hiddenLabel()
+                                ->grow(false),
+                        ])->from('lg'),
+
+                    ]),
+                Components\Section::make('Content')
+                    ->schema([
+                        Components\TextEntry::make('content')
+                            ->prose()
+                            ->markdown()
+                            ->hiddenLabel(),
+
+                    ])
+                    ->collapsible(),
+            ]);
+    }
+
+    public static function getRecordSubNavigation(Page $page): array
+    {
+        return $page->generateNavigationItems([
+            Pages\ViewUser::class,
+            Pages\CompletedPay::class,
+
+        ]);
     }
 
     public static function getRelations(): array
@@ -152,6 +226,8 @@ class VehicleResource extends Resource
             'index' => Pages\ListVehicles::route('/'),
             'create' => Pages\CreateVehicle::route('/create'),
             'edit' => Pages\EditVehicle::route('/{record}/edit'),
+            'view' => Pages\ViewUser::route('/{record}'),
+            'pay' => Pages\CompletedPay::route('/{record}/pay'),
         ];
     }
 }
