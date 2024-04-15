@@ -15,19 +15,24 @@ class Dashboard extends BaseDashboard
     use BaseDashboard\Concerns\HasFiltersForm;
     public function filtersForm(Form $form): Form
     {
-        return $form
-            ->schema([
-                Section::make()
-                    ->schema([
-                        // Select::make('businessCustomersOnly')
-                        //     ->boolean(),
-                        DatePicker::make('startDate')->label('Fecha Inicial')
-                            ->maxDate(fn (Get $get) => $get('endDate') ?: now()),
-                        DatePicker::make('endDate')->label('Fecha Final')
-                            ->minDate(fn (Get $get) => $get('startDate') ?: now())
-                            ->maxDate(now()),
-                    ])
-                    ->columns(2),
-            ]);
+        $user = Auth()->user();
+        if ($user->roles[0]->name === 'Administrador') {
+
+            return $form
+                ->schema([
+                    Section::make()
+                        ->schema([
+                            // Select::make('businessCustomersOnly')
+                            //     ->boolean(),
+                            DatePicker::make('startDate')->label('Fecha Inicial')
+                                ->maxDate(fn (Get $get) => $get('endDate') ?: now()),
+                            DatePicker::make('endDate')->label('Fecha Final')
+                                ->minDate(fn (Get $get) => $get('startDate') ?: now())
+                                ->maxDate(now()),
+                        ])
+                        ->columns(2),
+                ]);
+        }
+        return $form;
     }
 }

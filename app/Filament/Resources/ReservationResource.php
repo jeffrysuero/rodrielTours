@@ -110,12 +110,12 @@ class ReservationResource extends Resource
 
                     Tables\Columns\TextColumn::make('suitcases')
                         ->icon('heroicon-m-inbox-stack')
-                        ->iconColor('primary')
+                        ->iconColor('success')
                         ->searchable(),
 
                     Tables\Columns\TextColumn::make('numPeople')
                         ->icon('heroicon-m-user-group')
-                        ->iconColor('primary')
+                        ->iconColor('success')
                         ->searchable(),
 
                     Tables\Columns\TextColumn::make('client.name')
