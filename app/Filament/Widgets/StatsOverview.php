@@ -21,6 +21,11 @@ class StatsOverview extends BaseWidget
     {
 
         $user = Auth()->user();
+
+        if ($user->roles[0]->name === 'Representante') {
+            return [];
+        }
+
         $vehicle = Vehicle::all()->where('userId', $user->id)->first();
 
 
@@ -117,7 +122,7 @@ class StatsOverview extends BaseWidget
                 ->color('success')
                 ->chart([2, 2, 2, 2, 2, 2, 2]),
 
-                Stat::make('Total a pagar', ($total ? $total : 0))
+            Stat::make('Total a pagar', ($total ? $total : 0))
                 ->description('total a pagar por los servicios')
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->color('success')

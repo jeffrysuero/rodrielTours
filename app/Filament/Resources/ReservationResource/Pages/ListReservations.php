@@ -71,11 +71,13 @@ class ListReservations extends ListRecords
             return [
                 'ASIGNADO' => Tab::make('Servicios Asignado a Choferes')
                     ->icon('heroicon-m-user-circle')
-                    ->badge(Reservation::where('status', 'ASIGNADO')->where('vehicleId', $vehicle->id)
+                    ->badge(Reservation::whereIn('status',['REPRESENTANTE', 'ASIGNADO'])
+                    ->where('vehicleId', $vehicle->id)
+                    // ->where('status', 'REPRESENTANTE')
 
                         ->count() ?? 0)
                     ->modifyQueryUsing(function (Builder $query) {
-                        return $query->where('status', 'ASIGNADO');
+                        return $query->whereIn('status',['REPRESENTANTE','ASIGNADO']);
                     }),
 
                 'EN PROGRESO' => Tab::make('Servicios en Progreso')

@@ -9,7 +9,7 @@ class Reservation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['clientId', 'vehicleId', 'min_KM', 'suitcases', 'total_cost','numPeople','status','url','active'];
+    protected $fillable = ['clientId', 'vehicleId', 'min_KM', 'suitcases', 'total_cost','numPeople','status','url','active','numServcice'];
 
     public function client()
     {
@@ -21,8 +21,13 @@ class Reservation extends Model
         return $this->belongsTo(Vehicle::class,'vehicleId');
     }
 
+    public function represent()
+    {
+        return $this->hasOne(Represent::class, 'reservationId', 'id');
+    }
+
     public static function getStatusOptions()
     {
-        return ['SIN ASIGNAR' => 'SIN ASIGNAR', 'COMPLETADO' => 'COMPLETADO', 'CREADO' => 'CREADO'];
+        return ['SIN ASIGNAR' => 'SIN ASIGNAR', 'COMPLETADO' => 'COMPLETADO', 'CREADO' => 'CREADO','REPRESENTANTE' => 'REPRESENTANTE','DESP_CHOFER' => 'DESP_CHOFER'];
     }
 }
