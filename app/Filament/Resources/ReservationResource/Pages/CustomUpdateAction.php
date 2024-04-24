@@ -28,6 +28,7 @@ namespace Filament\Tables\Actions;
 use Filament\Actions\Concerns\CanCustomizeProcess;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class CustomUpdateAction extends Action
 {
@@ -68,7 +69,7 @@ class CustomUpdateAction extends Action
 
         $this->action(function (): void {
             $result = $this->process(static function (Model $record) {
-                $record->update(['status' => 'EN PROGRESO']);
+                $record->update(['status' => 'EN PROGRESO','dateInitiated' => Carbon::now()]);
         
                 return true;
             });

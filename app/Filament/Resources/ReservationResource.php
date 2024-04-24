@@ -44,9 +44,9 @@ class ReservationResource extends Resource
 
         /** generator the number the servcie*/
 
-        $letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; 
-        $numeroServicio = mt_rand(100000, 999999); 
-        $letraAleatoria = $letras[rand(0, strlen($letras) - 1)]; 
+        $letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $numeroServicio = mt_rand(100000, 999999);
+        $letraAleatoria = $letras[rand(0, strlen($letras) - 1)];
 
         $numeroServicioConLetra = $numeroServicio . $letraAleatoria;
 
@@ -88,7 +88,7 @@ class ReservationResource extends Resource
                                     ->required()
                                     ->numeric(),
                                 Forms\Components\Hidden::make('numServcice')->default($numeroServicioConLetra)
-                                    
+
                             ])
                     ]),
 
@@ -108,9 +108,9 @@ class ReservationResource extends Resource
             return $table->columns([
                 Tables\Columns\Layout\Panel::make([
                     Tables\Columns\TextColumn::make('numServcice')
-                    ->icon('heroicon-m-document-minus')
-                    ->iconColor('success')->alignCenter()
-                    ->searchable(),
+                        ->icon('heroicon-m-document-minus')
+                        ->iconColor('success')->alignCenter()
+                        ->searchable(),
                     Tables\Columns\TextColumn::make('client.airport')
                         ->icon('heroicon-m-paper-airplane')
                         ->iconColor('primary'),
@@ -400,7 +400,9 @@ class ReservationResource extends Resource
     public static function getEloquentQueryNomina(): Builder
     {
 
-        return parent::getEloquentQuery();
+        return parent::getEloquentQuery()
+             ->join('vehicles', 'reservations.vehicleId', '=', 'vehicles.id')
+            // ->orderBy('reservations.created_at', 'DESC')
+            ->select('reservations.*');
     }
-
 }

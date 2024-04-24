@@ -5,6 +5,7 @@ namespace Filament\Tables\Actions;
 use Filament\Actions\Concerns\CanCustomizeProcess;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class CompletedService extends Action
 {
@@ -45,7 +46,7 @@ class CompletedService extends Action
 
         $this->action(function (): void {
             $result = $this->process(static function (Model $record) {
-                $record->update(['status' => 'COMPLETADO']);
+                $record->update(['status' => 'COMPLETADO','finishTrip' => Carbon::now()]);
         
                 return true;
             });

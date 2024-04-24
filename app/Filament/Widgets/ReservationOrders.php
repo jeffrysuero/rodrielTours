@@ -65,6 +65,7 @@ class ReservationOrders extends BaseWidget
                         ->url(fn (Reservation $record): string => ReservationResource::getUrl('edit', ['record' => $record])),
     
                 ]);
+                
         }
         return $table
         ->query(ReservationResource::getEloquentQueryTableDashboard())

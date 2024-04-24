@@ -24,6 +24,7 @@ use Filament\Resources\Pages\Page;
 use Filament\Infolists\Infolist;
 // use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components;
+use Illuminate\Support\Facades\DB;
 
 class VehicleResource extends Resource
 {
@@ -34,7 +35,13 @@ class VehicleResource extends Resource
 
     public static function form(Form $form): Form
     {
-        $users = User::pluck('name', 'id')->toArray();
+        
+        $chofer = DB::table('model_has_roles')
+            ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+            ->join('users', 'model_has_roles.model_id', '=', 'users.id')
+            ->where('roles.name', 'Conductores')
+            ->pluck('users.name');
+
         return $form
 
             ->schema([
@@ -77,7 +84,7 @@ class VehicleResource extends Resource
                                     ->label('Chofer')
                                     ->searchable()
                                     ->noSearchResultsMessage('Chofer no encontrado')
-                                    ->options($users),
+                                    ->options($chofer),
 
                                 // ->label('Cliente')
                                 // ->searchable()

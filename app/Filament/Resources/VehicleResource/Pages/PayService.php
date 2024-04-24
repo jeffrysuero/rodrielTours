@@ -39,9 +39,11 @@ class PayService extends BulkAction
         $this->modalIcon(FilamentIcon::resolve('actions::delete-action.modal') ?? 'heroicon-o-banknotes');
 
         $this->action(function (): void {
-          $this->process(static fn (Collection $records) => $records->each(fn (Model $record) => $record->update(['active' => 'PAGOS'])));
-            // $this->process(static fn (Collection $records) => dd($records[0]->active));
+            // dd([]);
+           $this->process(static fn (Collection $records) => $records->each(fn (Model $record) => $record->update(['active' => 'PAGOS'])));
+            //   $this->process(static fn (Collection $records) => $records->each(fn (Model $record) => dd($record->reservactions)));
             $this->success();
+            
         });
 
         $this->deselectRecordsAfterCompletion();

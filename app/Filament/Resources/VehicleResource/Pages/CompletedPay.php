@@ -82,8 +82,8 @@ class CompletedPay extends ManageRelatedRecords
                     ->where('active', 'SIN PAGAR')
             )
 
-            ->defaultPaginationPageOption(5)
-            ->defaultSort('created_at', 'desc')
+            ->defaultPaginationPageOption(10)
+            // ->defaultSort('created_at', 'desc')
 
             ->heading('Dinero a Pagar $ ' . ($total ? $total : 0))
             // ->description('$'. 500.00)
@@ -130,16 +130,24 @@ class CompletedPay extends ManageRelatedRecords
                 // Tables\Actions\ViewAction::make(),
                 // Tables\Actions\EditAction::make(),
                 // Tables\Actions\DeleteAction::make(),
-               
+
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make()
+                ]),
             ])
             ->groupedBulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                // Tables\Actions\DeleteBulkAction::make(),
+                ExportBulkAction::make(),
                 Tables\Actions\PayService::make()
-                ->label('Pagar Todo')
-                ->pluralModelLabel('Esta Seguro de Pagar todo ?')
-                
+                    ->label('Pagar Todo')
+                    ->pluralModelLabel('Esta Seguro de Pagar todo ?')
+
+
                 // ->recordTitle('Esta seguro de pagar los Servicios')
-                
+
             ]);
     }
 }

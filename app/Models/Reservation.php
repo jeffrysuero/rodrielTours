@@ -9,7 +9,7 @@ class Reservation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['clientId', 'vehicleId', 'min_KM', 'suitcases', 'total_cost','numPeople','status','url','active','numServcice'];
+    protected $fillable = ['clientId', 'vehicleId', 'min_KM', 'suitcases', 'total_cost','numPeople','status','url','active','numServcice','dateInitiated','pickUpClient','finishTrip'];
 
     public function client()
     {
