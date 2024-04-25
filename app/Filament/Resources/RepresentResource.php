@@ -169,10 +169,7 @@ class RepresentResource extends Resource
                         return $record->status === 'COMPLETADO';
                     }),
 
-                Tables\Actions\DeleteAction::make()
-                    ->hidden(static function ($record) {
-                        return $record->status === 'COMPLETADO';
-                    }),
+                Tables\Actions\DeleteRepresent::make(),
 
                 //     Tables\Actions\DespacheRepresent::make()
                 //     ->label('Despachar el Chofer')
@@ -210,8 +207,8 @@ class RepresentResource extends Resource
 
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    ExportBulkAction::make()
+                    // Tables\Actions\DeleteBulkAction::make(),
+                    // ExportBulkAction::make()
                 ]),
             ]);
     }

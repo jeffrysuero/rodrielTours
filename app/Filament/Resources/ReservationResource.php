@@ -64,6 +64,7 @@ class ReservationResource extends Resource
                     ->schema([
                         Section::make('')
                             ->schema([
+                                Forms\Components\Hidden::make('id')->label('Id'),
                                 Select::make('clientId')
                                     ->label('Cliente')
                                     ->searchable()
@@ -356,6 +357,17 @@ class ReservationResource extends Resource
 
     public static function getPages(): array
     {
+        $reservaction = Reservation::where('status', 'COMPLETADO')->first();
+        // if($reservaction){
+        //     return [
+        //         'index' => Pages\ListReservations::route('/'),
+        //         'create' => Pages\CreateReservation::route('/create'),
+        //         // 'edit' => Pages\EditReservation::route('/{record}/edit'),
+
+        //     ];
+        // }
+        // dd($reservaction);
+
         return [
             'index' => Pages\ListReservations::route('/'),
             'create' => Pages\CreateReservation::route('/create'),
@@ -401,7 +413,7 @@ class ReservationResource extends Resource
     {
 
         return parent::getEloquentQuery()
-             ->join('vehicles', 'reservations.vehicleId', '=', 'vehicles.id')
+            ->join('vehicles', 'reservations.vehicleId', '=', 'vehicles.id')
             // ->orderBy('reservations.created_at', 'DESC')
             ->select('reservations.*');
     }

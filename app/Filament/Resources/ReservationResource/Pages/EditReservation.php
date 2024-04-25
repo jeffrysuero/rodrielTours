@@ -9,11 +9,12 @@ use Filament\Actions;
 use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Database\Eloquent\Model;
 
 class EditReservation extends EditRecord
 {
     protected static string $resource = ReservationResource::class;
- 
+
 
     protected function getHeaderActions(): array
     {
@@ -25,50 +26,22 @@ class EditReservation extends EditRecord
     protected function getRedirectUrl(): string
     {
 
-        
-        // $data = Reservation::whereNotNull('vehicleId')->get();
-
-        // foreach ($data as $dato) {
-        //     $dato->status = 'ASIGNADO';
-        //     $dato->save();
-        // }
-
-        // $data1 = Reservation::whereNull('vehicleId')->get();
-
-        // foreach ($data1 as $dato1) {
-        //     $dato1->status = 'SIN ASIGNAR';
-        //     $dato1->save();
-        // }
-
-        $reservations = Reservation::all();
-
-        foreach ($reservations as $reservation) {
-            if ($reservation->status !== 'COMPLETADO') {
-                // Si el estado no es "COMPLETADO", cambia el estado según si hay un vehículo asignado o no
-                if ($reservation->vehicleId !== null) {
-                    // Si hay un vehículo asignado, establecer el estado como 'ASIGNADO'
-                    $reservation->status = 'ASIGNADO';
-                } else {
-                    // Si no hay vehículo asignado, establecer el estado como 'SIN ASIGNAR'
-                    $reservation->status = 'SIN ASIGNAR';
-                }
-                
-                // Guardar los cambios en la reserva
-                $reservation->save();
-            }
-            // Si el estado es "COMPLETADO", no hagas ningún cambio
-        }
-
-
         return $this->getResource()::getUrl('index');
     }
 
-    
+    protected function handleRecordUpdate(Model $record, array $data): Model
+    {
+        $reservation = Reservation::all()->where('id', $record->id)->first();
 
-  
+        if($reservation->vehicleId){
+            $reservation->update(['status' => 'SIN ASIGNAR', 'vehicleId' => null]); 
+             return $reservation;     
+        }
 
+        $reservation->update(['status' => 'ASIGNADO', 'vehicleId' => $data['vehicleId']]);
+        
+        return $reservation;
 
-    
-
-    
+        
+    }
 }

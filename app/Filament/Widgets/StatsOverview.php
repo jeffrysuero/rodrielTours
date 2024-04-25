@@ -115,6 +115,23 @@ class StatsOverview extends BaseWidget
             $total = 0;
         }
 
+
+        if($user->view === 1){
+            return [
+                Stat::make('Total de Servicios Pendiente ', Reservation::where('vehicleId', $vehicle->id)->where('status', '!=', 'COMPLETADO')->count())
+                    ->description('Servicios Asignados')
+                    ->descriptionIcon('heroicon-m-arrow-trending-up')
+                    ->color('success')
+                    ->chart([2, 2, 2, 2, 2, 2, 2]),
+    
+                Stat::make('Total a pagar', ($total ? $total : 0))
+                    ->description('total a pagar por los servicios')
+                    ->descriptionIcon('heroicon-m-arrow-trending-up')
+                    ->color('success')
+                    ->chart([2, 2, 2, 2, 2, 2, 2])
+            ];
+        }
+
         return [
             Stat::make('Total de Servicios Pendiente ', Reservation::where('vehicleId', $vehicle->id)->where('status', '!=', 'COMPLETADO')->count())
                 ->description('Servicios Asignados')
@@ -122,11 +139,11 @@ class StatsOverview extends BaseWidget
                 ->color('success')
                 ->chart([2, 2, 2, 2, 2, 2, 2]),
 
-            Stat::make('Total a pagar', ($total ? $total : 0))
-                ->description('total a pagar por los servicios')
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
-                ->color('success')
-                ->chart([2, 2, 2, 2, 2, 2, 2])
+            // Stat::make('Total a pagar', ($total ? $total : 0))
+            //     ->description('total a pagar por los servicios')
+            //     ->descriptionIcon('heroicon-m-arrow-trending-up')
+            //     ->color('success')
+            //     ->chart([2, 2, 2, 2, 2, 2, 2])
         ];
     }
 }
