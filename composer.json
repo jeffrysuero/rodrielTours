@@ -15,6 +15,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "pxlrbt/filament-excel": "^2.3",
+        "silviolleite/laravelpwa": "^2.0",
         "spatie/laravel-permission": "^6.4"
     },
     "require-dev": {
