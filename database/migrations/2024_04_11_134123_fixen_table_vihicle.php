@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('reservations', function (Blueprint $table) {
             // $table->integer('vehicleId')->nullable();
-            $table->foreignId('vehicleId')->nullable()->constrained('vehicles')->cascadeOnUpdate()->cascadeOnDelete();
+            // $table->foreignId('vehicleId')->nullable()->constrained('vehicles')->cascadeOnUpdate()->cascadeOnDelete();
             
         });
     }
