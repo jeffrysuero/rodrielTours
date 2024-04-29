@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('reservations', function (Blueprint $table) {
             
-            $table->dropForeign('reservations_vehicleid_foreign');
-            $table->dropColumn('vehicleId');
+            // $table->dropForeign('reservations_vehicleid_foreign');
+            // $table->dropColumn('vehicleId');
         });
     }
 
