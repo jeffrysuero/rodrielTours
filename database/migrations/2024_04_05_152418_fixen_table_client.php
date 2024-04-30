@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('clients', function (Blueprint $table) {
-            $table->text('airport')->nullable();
-            $table->text('hotel')->nullable();
-            $table->dateTime('arrivalDate')->nullable();
-            $table->string('num_air')->nullable();
+            // $table->text('airport')->nullable();
+            // $table->text('hotel')->nullable();
+            // $table->dateTime('arrivalDate')->nullable();
+            // $table->string('num_air')->nullable();
         });
     }
 

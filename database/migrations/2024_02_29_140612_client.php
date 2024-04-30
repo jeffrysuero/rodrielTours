@@ -17,7 +17,10 @@ return new class extends Migration
             $table->string('lastName');
             $table->string('email');
             $table->string('phone');
-            // $table->string('address');
+            $table->text('airport')->nullable();
+            $table->text('hotel')->nullable();
+            $table->dateTime('arrivalDate')->nullable();
+            $table->string('num_air')->nullable();
             $table->timestamps();
         });
     }

@@ -22,6 +22,9 @@ return new class extends Migration
             $table->integer('passenger_capacity');
             $table->integer('luggage_capacity');
             $table->decimal('cost_per_day', 8, 2);
+            $table->string('placa')->nullable();
+            $table->string('color')->nullable();
+            $table->integer('percentage')->nullable();
             $table->timestamps();
         });
     }
