@@ -22,6 +22,7 @@ return new class extends Migration
             $table->text('url')->nullable();
             $table->enum('active',['PAGOS', 'SIN PAGAR'])->default('SIN PAGAR');
             $table->string('numServcice')->nullable();
+            $table->string('min_KM')->nullable();
             $table->enum('status',['SIN ASIGNAR', 'COMPLETADO','ASIGNADO','EN PROGRESO','REPRESENTANTE','DESP_CHOFER'])->default('SIN ASIGNAR');
             $table->timestamp('dateInitiated')->nullable();
             $table->timestamp('pickUpClient')->nullable();
