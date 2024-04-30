@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('reservations', function (Blueprint $table) {
-            $table->integer('vehicleId')->nullable();
-            // $table->enum('status',['SIN ASIGNAR', 'COMPLETADO','ASIGNADO','EN PROGRESO'])->default('SIN ASIGNAR');
-            $table->enum('status',['SIN ASIGNAR', 'COMPLETADO','ASIGNADO','EN PROGRESO','REPRESENTANTE','DESP_CHOFER'])->default('SIN ASIGNAR');
-            $table->text('url')->nullable();
+            // $table->integer('vehicleId')->nullable();
+            // // $table->enum('status',['SIN ASIGNAR', 'COMPLETADO','ASIGNADO','EN PROGRESO'])->default('SIN ASIGNAR');
+            // $table->enum('status',['SIN ASIGNAR', 'COMPLETADO','ASIGNADO','EN PROGRESO','REPRESENTANTE','DESP_CHOFER'])->default('SIN ASIGNAR');
+            // $table->text('url')->nullable();
         });
     }
 

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('reservations', function (Blueprint $table) {
-            $table->enum('active',['PAGOS', 'SIN PAGAR'])->default('SIN PAGAR');
+            // $table->enum('active',['PAGOS', 'SIN PAGAR'])->default('SIN PAGAR');
         });
     }
 
