@@ -397,6 +397,9 @@ class ReservationResource extends Resource
         if ($user->roles[0]->name === 'Administrador') {
             return parent::getEloquentQuery();
         }
+        if ($user->roles[0]->name === 'Operador') {
+            return parent::getEloquentQuery();
+        }
 
         // $franchise = Franchise::where('id', $user->franchiseId)->first();
         // $service = Service::where('id', $franchise->serviceId)->first();
