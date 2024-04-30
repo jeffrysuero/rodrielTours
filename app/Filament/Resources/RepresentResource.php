@@ -254,6 +254,12 @@ class RepresentResource extends Resource
             });
         }
 
+        if ($user->roles[0]->name === 'Operador') {
+            return parent::getEloquentQuery()->whereHas('reservations', function ($query) {
+                $query->where('status', 'REPRESENTANTE')->orWhere('status', 'DESP_CHOFER');;
+            });
+        }
+
         return parent::getEloquentQuery()->whereHas('reservations', function ($query) {
             $user = Auth()->user();
             $query->where('status', 'REPRESENTANTE')->where('userId', $user->id);
