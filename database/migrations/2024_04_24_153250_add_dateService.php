@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('reservations', function (Blueprint $table) {
-            $table->timestamp('dateInitiated')->nullable();
-            $table->timestamp('pickUpClient')->nullable();
-            $table->timestamp('finishTrip')->nullable();
+            // $table->timestamp('dateInitiated')->nullable();
+            // $table->timestamp('pickUpClient')->nullable();
+            // $table->timestamp('finishTrip')->nullable();
         });
     }
 
