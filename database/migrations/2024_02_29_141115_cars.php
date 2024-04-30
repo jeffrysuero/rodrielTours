@@ -13,15 +13,16 @@ return new class extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('userId')->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->integer('userId');
+            // $table->foreignId('userId')->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('marca');
             $table->string('modelo');
-            $table->integer('year');
-            $table->string('type');
+            // $table->integer('year');
+            // $table->string('type');
             $table->string('image');
             $table->integer('passenger_capacity');
             $table->integer('luggage_capacity');
-            $table->decimal('cost_per_day', 8, 2);
+            // $table->decimal('cost_per_day', 8, 2);
             $table->string('placa')->nullable();
             $table->string('color')->nullable();
             $table->integer('percentage')->nullable();
