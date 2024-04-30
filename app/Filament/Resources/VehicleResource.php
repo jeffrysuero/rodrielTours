@@ -35,13 +35,13 @@ class VehicleResource extends Resource
 
     public static function form(Form $form): Form
     {
-        
+
         $chofer = DB::table('model_has_roles')
             ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
             ->join('users', 'model_has_roles.model_id', '=', 'users.id')
             ->where('roles.name', 'Conductores')
-            ->pluck('users.name');
-
+            ->pluck('users.name','users.id');
+        //  dd($chofer);
         return $form
 
             ->schema([
@@ -80,7 +80,7 @@ class VehicleResource extends Resource
                                 Forms\Components\TextInput::make('placa')->label('Placa')
                                     ->required(),
 
-                                    Select::make('userId')
+                                Select::make('userId')
                                     ->label('Chofer')
                                     ->searchable()
                                     ->noSearchResultsMessage('Chofer no encontrado')
@@ -121,8 +121,8 @@ class VehicleResource extends Resource
                 Tables\Columns\TextColumn::make('color')->label('Color')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('type')->label('Tipo')
-                    ->searchable(),
+                // Tables\Columns\TextColumn::make('type')->label('Tipo')
+                //     ->searchable(),
                 Tables\Columns\TextColumn::make('passenger_capacity')->label('Cap.Pasagero')
                     ->numeric()
                     ->sortable(),
@@ -149,9 +149,9 @@ class VehicleResource extends Resource
             ])
             ->actions([
                 // Tables\Actions\ActionGroup::make([
-                    Tables\Actions\ViewAction::make()->color('success')->label('pagar')->icon('heroicon-o-banknotes'),
-                    Tables\Actions\EditAction::make()->color('warning')->label('Editar'),
-                    Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ViewAction::make()->color('success')->label('pagar')->icon('heroicon-o-banknotes'),
+                Tables\Actions\EditAction::make()->color('warning')->label('Editar'),
+                Tables\Actions\DeleteAction::make(),
                 // ])
             ])
             ->bulkActions([

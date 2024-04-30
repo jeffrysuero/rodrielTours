@@ -97,11 +97,11 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ActionGroup::make([
-                    Tables\Actions\ViewAction::make()->color('info'),
-                    Tables\Actions\EditAction::make()->color('warning'),
-                    Tables\Actions\DeleteAction::make(),
-                ])
+                // Tables\Actions\ActionGroup::make([
+                    // Tables\Actions\ViewAction::make()->color('info')->label('Editar'),
+                    Tables\Actions\EditAction::make()->color('warning')->label('Editar'),
+                    Tables\Actions\DeleteAction::make()->label('Eliminar'),
+                // ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

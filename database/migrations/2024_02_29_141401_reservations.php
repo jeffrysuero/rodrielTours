@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('suitcases')->nullable();
             $table->string('numPeople')->nullable();
             $table->text('url')->nullable();
-            $table->integer('vehicleId');
+            $table->integer('vehicleId')->nullable();
             $table->enum('active',['PAGOS', 'SIN PAGAR'])->default('SIN PAGAR');
             $table->string('numServcice')->nullable();
             $table->enum('status',['SIN ASIGNAR', 'COMPLETADO','ASIGNADO','EN PROGRESO','REPRESENTANTE','DESP_CHOFER'])->default('SIN ASIGNAR');

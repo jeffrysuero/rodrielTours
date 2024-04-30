@@ -31,17 +31,34 @@ class EditReservation extends EditRecord
 
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
-        $reservation = Reservation::all()->where('id', $record->id)->first();
+        $reservation = Reservation::all()->where('id', $data['id'])->first();
+        //  dd($data['vehicleId']);
+        if ($reservation && $data['vehicleId'] != null) {
 
-        if($reservation->vehicleId){
-            $reservation->update(['status' => 'SIN ASIGNAR', 'vehicleId' => null]); 
-             return $reservation;     
+            $reservation->update([
+                'clientId' => $data['clientId'],
+                'status' => 'ASIGNADO',
+                'vehicleId' => $data['vehicleId'],
+                'min_KM' => $data['min_KM'],
+                'suitcases' => $data['suitcases'],
+                'numPeople' => $data['numPeople'],
+                'total_cost' => $data['total_cost'],
+                'numServcice' => $data['numServcice']
+            ]);
+            return $reservation;
         }
 
-        $reservation->update(['status' => 'ASIGNADO', 'vehicleId' => $data['vehicleId']]);
-        
-        return $reservation;
+        $reservation->update([
+            'status' => 'SIN ASIGNAR',
+            'vehicleId' => null,
+            'clientId' => $data['clientId'],
+            'min_KM' => $data['min_KM'],
+            'suitcases' => $data['suitcases'],
+            'numPeople' => $data['numPeople'],
+            'total_cost' => $data['total_cost'],
+            'numServcice' => $data['numServcice']
+        ]);
 
-        
+        return $reservation;
     }
 }
