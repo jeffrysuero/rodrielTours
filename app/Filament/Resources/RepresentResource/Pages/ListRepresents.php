@@ -80,6 +80,34 @@ class ListRepresents extends ListRecords
             ];
         }
 
+        if ($user->roles[0]->name === 'Super Admin') {
+            return [
+                'REPRESENTANTE' => Tab::make('Servicios')
+                    ->icon('heroicon-m-x-circle')
+                    ->badge(Reservation::where('status', 'REPRESENTANTE')
+                        ->count() ?? 0)
+                        ->modifyQueryUsing(function (Builder $query) {
+                            return $query->whereHas('reservations', function ($query) {
+                                $query->where('status', 'REPRESENTANTE');
+                            });
+                        }),
+
+                'DESP_CHOFER' => Tab::make('Despachar chofer')
+                    ->icon('heroicon-m-x-circle')
+                    ->badge(Reservation::where('status', 'DESP_CHOFER')
+                        ->count() ?? 0)
+                        ->modifyQueryUsing(function (Builder $query) {
+                            return $query->whereHas('reservations', function ($query) {
+                               $data = $query->where('status', 'DESP_CHOFER');
+                            //    dd($data);
+                            });
+                        }),
+                // ->modifyQueryUsing(function (Builder $query) {
+                //     return $query->where('status', 'SIN ASIGNAR');
+                // }),
+            ];
+        }
+
         if ($user->roles[0]->name === 'Representante') {
 
             return [

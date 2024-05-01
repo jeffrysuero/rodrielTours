@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
            DB::table('permissions')->insert(['name' => 'delete represent','guard_name' => 'web']);
    
            // Permisos para servicios
-           DB::table('permissions')->insert(['name' => 'ver servise','guard_name' => 'web']);
+           DB::table('permissions')->insert(['name' => 'ver service','guard_name' => 'web']);
            DB::table('permissions')->insert(['name' => 'crear service','guard_name' => 'web']);
            DB::table('permissions')->insert(['name' => 'update service','guard_name' => 'web']);
            DB::table('permissions')->insert(['name' => 'delete service','guard_name' => 'web']);
@@ -77,6 +77,8 @@ class DatabaseSeeder extends Seeder
            //table roles
            DB::table('roles')->insert(['name' => 'Conductores','guard_name' => 'web']);
            DB::table('roles')->insert(['name' => 'Representante','guard_name' => 'web']);
+           DB::table('roles')->insert(['name' => 'Operador','guard_name' => 'web']);
+           DB::table('roles')->insert(['name' => 'Super Admin','guard_name' => 'web']);
         
     }
 }

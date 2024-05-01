@@ -43,10 +43,69 @@ class BlogPostsChart extends ChartWidget
                 'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     
             ];
-        }else{
+        }
+
+        if ($user->roles[0]->name === 'Operador') {
+
+            $monthlyTotal = Reservation::selectRaw('SUM(total_cost) as total, MONTH(updated_at) as month')
+                ->where('status', 'COMPLETADO')
+                ->groupBy('month')
+                ->get()
+                ->pluck('total', 'month')
+                ->toArray();
+    
+            $labels = [];
+            $data = [];
+    
+            for ($i = 1; $i <= 12; $i++) {
+                $monthName = Carbon::createFromFormat('!m', $i)->format('F');
+                $labels[] = $monthName;
+                $data[] = $monthlyTotal[$i] ?? 0;
+            }
+    
+            return [
+                'datasets' => [
+                    [
+                        'label' => 'Ordenes Completadas',
+                        'data' => $data,
+                    ],
+                ],
+                'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    
+            ];
+        }
+        if ($user->roles[0]->name === 'Super Admin') {
+
+            $monthlyTotal = Reservation::selectRaw('SUM(total_cost) as total, MONTH(updated_at) as month')
+                ->where('status', 'COMPLETADO')
+                ->groupBy('month')
+                ->get()
+                ->pluck('total', 'month')
+                ->toArray();
+    
+            $labels = [];
+            $data = [];
+    
+            for ($i = 1; $i <= 12; $i++) {
+                $monthName = Carbon::createFromFormat('!m', $i)->format('F');
+                $labels[] = $monthName;
+                $data[] = $monthlyTotal[$i] ?? 0;
+            }
+    
+            return [
+                'datasets' => [
+                    [
+                        'label' => 'Ordenes Completadas',
+                        'data' => $data,
+                    ],
+                ],
+                'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    
+            ];
+        }
 
             return [];
-        }
+        
     }
 
     protected function getType(): string
