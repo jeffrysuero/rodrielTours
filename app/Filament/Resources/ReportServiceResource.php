@@ -14,6 +14,7 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
@@ -24,7 +25,21 @@ class ReportServiceResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Reposrtes';
     protected static ?string $navigationLabel = 'Servicios';
+    protected static bool $shouldRegisterNavigation = false;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        $user = Auth()->user();
+
+        // Verifica si el usuario no es administrador
+        if ($user->roles[0]->name === 'Administrador' || $user->roles[0]->name === 'Operador' || $user->roles[0]->name === 'Super Admin') {
+            return true; // Oculta el grupo de navegación
+        }
+
+        return false;
+    }
+
+   
     public static function form(Form $form): Form
     {
         return $form
@@ -79,7 +94,7 @@ class ReportServiceResource extends Resource
                     ->alignEnd()
                     ->iconColor('warning'),
 
-                    Tables\Columns\TextColumn::make('active')->icon('heroicon-m-banknotes')->label('estado')
+                Tables\Columns\TextColumn::make('active')->icon('heroicon-m-banknotes')->label('estado')
                     ->alignEnd()
                     ->iconColor('warning'),
 
@@ -134,15 +149,12 @@ class ReportServiceResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-       
-        // $modelRole = DB::table('model_has_roles')
-        //     ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-        //     ->join('users', 'model_has_roles.model_id', '=', 'users.id')
-        //     ->where('roles.name', 'Representante')
-        //     ->pluck('users.id');
 
-        // $allUserIds = $modelRole->toArray();
-        // return parent::getEloquentQuery()->whereIn('id', $allUserIds);
-        return parent::getEloquentQuery();
+        $user = Auth()->user();
+        if ($user->roles[0]->name === 'Administrador' || $user->roles[0]->name === 'Operador' || $user->roles[0]->name === 'Super Admin') {
+
+            return parent::getEloquentQuery();
+        }
+        return parent::getEloquentQuery()->where('id', '=', null);
     }
 }

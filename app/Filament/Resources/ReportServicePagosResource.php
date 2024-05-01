@@ -24,7 +24,19 @@ class ReportServicePagosResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Reposrtes';
     protected static ?string $navigationLabel = 'Servicios Pagados ';
+    protected static bool $shouldRegisterNavigation = false;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        $user = Auth()->user();
+
+        // Verifica si el usuario no es administrador
+        if ($user->roles[0]->name === 'Administrador' || $user->roles[0]->name === 'Operador' || $user->roles[0]->name === 'Super Admin') {
+            return true; // Oculta el grupo de navegación
+        }
+
+        return false;
+    }
     public static function form(Form $form): Form
     {
         return $form
