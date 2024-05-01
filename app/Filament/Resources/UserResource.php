@@ -54,7 +54,7 @@ class UserResource extends Resource
                             ->required()
                             ->maxLength(255),
 
-                       FileUpload::make('image')
+                        FileUpload::make('image')
                             ->image()
                             ->directory('users'),
 
@@ -80,6 +80,8 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('roles.name')->label('Rol')
+                    ->searchable(),
                 ImageColumn::make('image')
                     ->height(60)
                     ->circular(),
@@ -98,9 +100,9 @@ class UserResource extends Resource
             ])
             ->actions([
                 // Tables\Actions\ActionGroup::make([
-                    // Tables\Actions\ViewAction::make()->color('info')->label('Editar'),
-                    Tables\Actions\EditAction::make()->color('warning')->label('Editar'),
-                    Tables\Actions\DeleteAction::make()->label('Eliminar'),
+                // Tables\Actions\ViewAction::make()->color('info')->label('Editar'),
+                Tables\Actions\EditAction::make()->color('warning')->label('Editar'),
+                Tables\Actions\DeleteAction::make()->label('Eliminar'),
                 // ])
             ])
             ->bulkActions([
@@ -112,7 +114,7 @@ class UserResource extends Resource
     }
 
 
-    
+
 
 
     // public static function getRecordSubNavigation(Page $page): array
@@ -120,7 +122,7 @@ class UserResource extends Resource
     //     return $page->generateNavigationItems([
     //         Pages\ViewUser::class,
     //         Pages\CompletedPay::class,
-           
+
     //     ]);
     // }
 
@@ -131,7 +133,7 @@ class UserResource extends Resource
         ];
     }
 
-   
+
 
     public static function getPages(): array
     {
@@ -139,26 +141,26 @@ class UserResource extends Resource
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
-            
+
         ];
     }
     public static function getEloquentQuery(): Builder
     {
-        
+
         $user = Auth()->user();
 
-       
+
         if ($user->roles[0]->name != 'Administrador') {
-            
+
             $adminIds = User::whereHas('roles', function ($query) {
                 $query->where('name', 'Administrador');
             })->pluck('id');
-    
-       
+
+
             return parent::getEloquentQuery()->whereNotIn('id', $adminIds);
         }
-    
-    
+
+
         return parent::getEloquentQuery();
     }
 }
