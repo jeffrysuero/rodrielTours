@@ -1,28 +1,5 @@
 <?php
 
-// use App\Models\Reservation;
-// use Filament\Tables\Actions\Action;
-// use Illuminate\Support\Facades\Redirect;
-// class CustomUpdateAction extends Action
-// {
-//     // public static $view = 'filament.actions.custom-update';
-//     protected ?string $name = 'custom_update_action';
-//     public function handle()
-//     {
-//         dd([]);
-//         // Aquí colocas la lógica de actualización
-//         // $record = Reservation::find();
-//         // dd('hola');
-//         // Por ejemplo:
-//         // $record->update(['propiedad' => 'nuevo valor']);
-
-//         // Si deseas redirigir a una página después de la actualización, puedes usar:
-//         return Redirect::to('/dashboard');
-//     }
-// }
-
-
-
 namespace Filament\Tables\Actions;
 
 use Filament\Actions\Concerns\CanCustomizeProcess;

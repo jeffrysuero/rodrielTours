@@ -30,9 +30,8 @@ class ReportServicePagosResource extends Resource
     {
         $user = Auth()->user();
 
-        // Verifica si el usuario no es administrador
         if ($user->roles[0]->name === 'Administrador' || $user->roles[0]->name === 'Operador' || $user->roles[0]->name === 'Super Admin') {
-            return true; // Oculta el grupo de navegación
+            return true; 
         }
 
         return false;

@@ -13,19 +13,17 @@ class CreateReservation extends CreateRecord
 
     protected function getRedirectUrl(): string
     {
-
-        $reservations = Reservation::all();
-
-        foreach ($reservations as $reservation) {
-           
-                if ($reservation->vehicleId !== null) {
-                 
-                    $reservation->status = 'ASIGNADO';
-                } 
-                $reservation->save();
+        $reservationId = $this->getResource()::getModel()::latest()->first()->id;
         
-        }
+        $reservations = Reservation::where('id', $reservationId)->first();
+        if ($reservations->vehicleId !== null) {
+                 
+            $reservations->status = 'ASIGNADO';
+            $reservations->save();
+        } 
 
         return $this->getResource()::getUrl('index');
     }
+
+    
 }

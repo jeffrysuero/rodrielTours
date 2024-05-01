@@ -158,6 +158,15 @@ class ListReservations extends ListRecords
                         return $query->whereIn('status',['REPRESENTANTE','ASIGNADO']);
                     }),
 
+                    'ON HOLD' => Tab::make('En espera a Recojer pasajero')
+                    ->icon('heroicon-m-exclamation-triangle')
+                    ->badge(Reservation::where('status', 'DESP_CHOFER')->where('vehicleId', $vehicle->id)
+
+                        ->count() ?? 0)
+                    ->modifyQueryUsing(function (Builder $query) {
+                        return $query->where('status', 'DESP_CHOFER');
+                    }),
+
                 'EN PROGRESO' => Tab::make('Servicios en Progreso')
                     ->icon('heroicon-m-exclamation-triangle')
                     ->badge(Reservation::where('status', 'EN PROGRESO')->where('vehicleId', $vehicle->id)

@@ -11,6 +11,7 @@ class BlogPostsChart extends ChartWidget
     protected static ?string $heading = 'Ganancia Ordenes Completadas';
     protected static ?int $sort = 1;
     protected static string $color = 'success';
+    
 
     protected function getData(): array
     {

@@ -205,13 +205,13 @@ class ReservationResource extends Resource
                         ->label('Iniciar Viaje')
                         ->recordTitle('Esta seguro de Iniciar el Viaje')
                         ->hidden(static function ($record) {
-                            return in_array($record->status, ['COMPLETADO', 'EN PROGRESO', 'SIN ASIGNAR']);
+                            return in_array($record->status, ['COMPLETADO', 'EN PROGRESO', 'SIN ASIGNAR','REPRESENTANTE','DESP_CHOFER']);
                         }),
                     Tables\Actions\CompletedService::make()
                         ->label('Terminar Servicio')
                         ->recordTitle('Esta seguro de Terminar el Viaje')
                         ->hidden(static function ($record) {
-                            return in_array($record->status, ['COMPLETADO', 'ASIGNADO', 'SIN ASIGNAR']);
+                            return in_array($record->status, ['COMPLETADO', 'ASIGNADO', 'SIN ASIGNAR','REPRESENTANTE','DESP_CHOFER']);
                         }),
                 ])
                 // ->actions([
@@ -380,7 +380,7 @@ class ReservationResource extends Resource
     {
         $user = Auth()->user();
 
-        if ($user->roles[0]->name === 'Administrador') {
+        if ($user->roles[0]->name === 'Administrador' || $user->roles[0]->name === 'Operador' || $user->roles[0]->name === 'Super Admin') {
             return parent::getEloquentQuery()->where('status', '!=', 'COMPLETADO');
         } else {
 
@@ -403,15 +403,6 @@ class ReservationResource extends Resource
         if ($user->roles[0]->name === 'Super Admin') {
             return parent::getEloquentQuery();
         }
-
-        // $franchise = Franchise::where('id', $user->franchiseId)->first();
-        // $service = Service::where('id', $franchise->serviceId)->first();
-
-        // if ($service  && $service->name === 'stamp') {
-        //     return parent::getEloquentQuery();
-        // }
-
-        // return parent::getEloquentQuery()->where('franchiseId');
         return parent::getEloquentQuery()->where('vehicleId', $vehicle->id);
     }
 
