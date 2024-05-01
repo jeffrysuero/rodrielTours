@@ -144,12 +144,21 @@ class UserResource extends Resource
     }
     public static function getEloquentQuery(): Builder
     {
+        
         $user = Auth()->user();
 
+       
         if ($user->roles[0]->name != 'Administrador') {
-
-            // return parent::getEloquentQuery()->where('createUserId', $user->id);
+            
+            $adminIds = User::whereHas('roles', function ($query) {
+                $query->where('name', 'Administrador');
+            })->pluck('id');
+    
+       
+            return parent::getEloquentQuery()->whereNotIn('id', $adminIds);
         }
+    
+    
         return parent::getEloquentQuery();
     }
 }
