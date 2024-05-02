@@ -120,11 +120,6 @@ class ListRepresents extends ListRecords
                                 $query->where('status', 'REPRESENTANTE');
                             });
                         }),
-                // ->modifyQueryUsing(function (Builder $query) {
-                //     $user = Auth()->user();
-                //     return $query->where('userId', $user->id);
-                //     // return $query->where('status', 'SIN ASIGNAR');
-                // }),
 
                 'DESP_CHOFER' => Tab::make('Despachar chofer')
                     ->icon('heroicon-m-x-circle')

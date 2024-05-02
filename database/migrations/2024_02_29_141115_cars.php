@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
-            $table->integer('userId');
+            $table->integer('userId')->nullable();
             // $table->foreignId('userId')->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('marca');
             $table->string('modelo');

@@ -9,7 +9,7 @@ class Represent extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['userId','vehicleId','reservationId' ];
+    protected $fillable = ['userId','vehicleId','reservationId','choferId' ];
 
     public function users()
     {

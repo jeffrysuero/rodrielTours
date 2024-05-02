@@ -15,21 +15,33 @@ class CreateRepresent extends CreateRecord
 
     protected function getRedirectUrl(): string
     {
-        // $id = $record->id;
-        $reservations = Reservation::all();
-        $represent = Represent::all();
+        $represent = $this->getResource()::getModel()::latest()->first();
+        // dd($represent);
+        $reservationToUpdate = Reservation::where('id', $represent->reservationId)->first();
+        // dd($reservationToUpdate);
 
-        foreach ($represent as $rep) {
-            // Encuentra la reservación correspondiente al reservationId en represent
-            $reservationToUpdate = $reservations->where('id', $rep->reservationId)->first();
-
-            if ($reservationToUpdate) {
-                // Actualiza el estado de la reservación
-                $reservationToUpdate->status = 'REPRESENTANTE';
-                $reservationToUpdate->vehicleId = $rep->vehicleId;
-                $reservationToUpdate->save();
-            }
+        if ($reservationToUpdate) {
+            // Actualiza el estado de la reservación
+            $reservationToUpdate->status = 'REPRESENTANTE';
+            $reservationToUpdate->userId = $represent->choferId;
+            $reservationToUpdate->vehicleId = $represent->vehicleId;
+            $reservationToUpdate->save();
         }
+        // $id = $record->id;
+        // $reservations = Reservation::all();
+        // $represent = Represent::all();
+
+        // foreach ($represent as $rep) {
+        //     // Encuentra la reservación correspondiente al reservationId en represent
+        //     $reservationToUpdate = $reservations->where('id', $rep->reservationId)->first();
+
+        //     if ($reservationToUpdate) {
+        //         // Actualiza el estado de la reservación
+        //         $reservationToUpdate->status = 'REPRESENTANTE';
+        //         $reservationToUpdate->vehicleId = $rep->vehicleId;
+        //         $reservationToUpdate->save();
+        //     }
+        // }
 
         return $this->getResource()::getUrl('index');
     }

@@ -80,11 +80,11 @@ class VehicleResource extends Resource
                                 Forms\Components\TextInput::make('placa')->label('Placa')
                                     ->required(),
 
-                                Select::make('userId')
-                                    ->label('Chofer')
-                                    ->searchable()
-                                    ->noSearchResultsMessage('Chofer no encontrado')
-                                    ->options($chofer),
+                                // Select::make('userId')
+                                //     ->label('Chofer')
+                                //     ->searchable()
+                                //     ->noSearchResultsMessage('Chofer no encontrado')
+                                //     ->options($chofer),
 
                                 // ->label('Cliente')
                                 // ->searchable()
@@ -112,8 +112,8 @@ class VehicleResource extends Resource
         return $table
 
             ->columns([
-                Tables\Columns\TextColumn::make('users.name')->label('Chofer')
-                    ->searchable(),
+                // Tables\Columns\TextColumn::make('users.name')->label('Chofer')
+                //     ->searchable(),
                 Tables\Columns\TextColumn::make('marca')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('modelo')
@@ -149,7 +149,7 @@ class VehicleResource extends Resource
             ])
             ->actions([
                 // Tables\Actions\ActionGroup::make([
-                Tables\Actions\ViewAction::make()->color('success')->label('pagar')->icon('heroicon-o-banknotes'),
+                // Tables\Actions\ViewAction::make()->color('success')->label('pagar')->icon('heroicon-o-banknotes'),
                 Tables\Actions\EditAction::make()->color('warning')->label('Editar'),
                 Tables\Actions\DeleteAction::make(),
                 // ])
@@ -163,62 +163,62 @@ class VehicleResource extends Resource
     }
 
 
-    public static function infolist(Infolist $infolist): Infolist
-    {
-        return $infolist
-            ->schema([
-                Components\Section::make()
-                    ->schema([
-                        Components\Split::make([
-                            Components\Grid::make(2)
-                                ->schema([
-                                    Components\Group::make([
-                                        Components\TextEntry::make('users.name')->label('Nombre'),
-                                        Components\TextEntry::make('users.email')->label('Email'),
-                                        // Components\TextEntry::make('published_at')
-                                        //     ->badge()
-                                        //     ->date()
-                                        //     ->color('success'),
-                                    ]),
-                                    Components\Group::make([
-                                        Components\TextEntry::make(''),
-                                        Components\TextEntry::make(''),
-                                        // Components\SpatieTagsEntry::make('tags'),
-                                    ]),
+    // public static function infolist(Infolist $infolist): Infolist
+    // {
+    //     return $infolist
+    //         ->schema([
+    //             Components\Section::make()
+    //                 ->schema([
+    //                     Components\Split::make([
+    //                         Components\Grid::make(2)
+    //                             ->schema([
+    //                                 Components\Group::make([
+    //                                     Components\TextEntry::make('users.name')->label('Nombre'),
+    //                                     Components\TextEntry::make('users.email')->label('Email'),
+    //                                     // Components\TextEntry::make('published_at')
+    //                                     //     ->badge()
+    //                                     //     ->date()
+    //                                     //     ->color('success'),
+    //                                 ]),
+    //                                 Components\Group::make([
+    //                                     Components\TextEntry::make(''),
+    //                                     Components\TextEntry::make(''),
+    //                                     // Components\SpatieTagsEntry::make('tags'),
+    //                                 ]),
 
-                                    Components\Group::make([
-                                        // Components\TextEntry::make('marca'),
-                                        // Components\TextEntry::make('modelo'),
-                                        // Components\SpatieTagsEntry::make('tags'),
+    //                                 Components\Group::make([
+    //                                     // Components\TextEntry::make('marca'),
+    //                                     // Components\TextEntry::make('modelo'),
+    //                                     // Components\SpatieTagsEntry::make('tags'),
 
-                                    ]),
-                                ]),
-                            Components\ImageEntry::make('users.image')
-                                ->hiddenLabel()
-                                ->grow(false),
-                        ])->from('lg'),
+    //                                 ]),
+    //                             ]),
+    //                         Components\ImageEntry::make('users.image')
+    //                             ->hiddenLabel()
+    //                             ->grow(false),
+    //                     ])->from('lg'),
 
-                    ]),
-                Components\Section::make('Content')
-                    ->schema([
-                        Components\TextEntry::make('content')
-                            ->prose()
-                            ->markdown()
-                            ->hiddenLabel(),
+    //                 ]),
+    //             Components\Section::make('Content')
+    //                 ->schema([
+    //                     Components\TextEntry::make('content')
+    //                         ->prose()
+    //                         ->markdown()
+    //                         ->hiddenLabel(),
 
-                    ])
-                    ->collapsible(),
-            ]);
-    }
+    //                 ])
+    //                 ->collapsible(),
+    //         ]);
+    // }
 
-    public static function getRecordSubNavigation(Page $page): array
-    {
-        return $page->generateNavigationItems([
-            Pages\ViewUser::class,
-            Pages\CompletedPay::class,
+    // public static function getRecordSubNavigation(Page $page): array
+    // {
+    //     return $page->generateNavigationItems([
+    //         Pages\ViewUser::class,
+    //         Pages\CompletedPay::class,
 
-        ]);
-    }
+    //     ]);
+    // }
 
     public static function getRelations(): array
     {
@@ -233,8 +233,8 @@ class VehicleResource extends Resource
             'index' => Pages\ListVehicles::route('/'),
             'create' => Pages\CreateVehicle::route('/create'),
             'edit' => Pages\EditVehicle::route('/{record}/edit'),
-            'view' => Pages\ViewUser::route('/{record}'),
-            'pay' => Pages\CompletedPay::route('/{record}/pay'),
+            // 'view' => Pages\ViewUser::route('/{record}'),
+            // 'pay' => Pages\CompletedPay::route('/{record}/pay'),
         ];
     }
 }

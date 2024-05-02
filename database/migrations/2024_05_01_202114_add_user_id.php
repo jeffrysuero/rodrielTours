@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('represents', function (Blueprint $table) {
-            $table->id();
+        Schema::table('reservations', function (Blueprint $table) {
             $table->integer('userId')->nullable();
-            $table->integer('reservationId')->nullable();
-            $table->integer('choferId')->nullable();
-            $table->integer('vehicleId')->nullable();
-            $table->timestamps();
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('represents');
+        Schema::table('reservations', function (Blueprint $table) {
+            $table->dropColumn('userId')->nullable();
+        });
     }
 };

@@ -9,7 +9,23 @@ class Reservation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['clientId', 'vehicleId', 'min_KM', 'suitcases', 'total_cost','numPeople','status','url','active','numServcice','dateInitiated','pickUpClient','finishTrip'];
+    protected $fillable = [
+        'clientId', 
+        'vehicleId', 
+        'min_KM', 
+        'suitcases', 
+        'total_cost',
+        'numPeople',
+        'status',
+        'url',
+        'active',
+        'numServcice',
+        'dateInitiated',
+        'pickUpClient',
+        'finishTrip',
+        'userId',
+        'arrivalDate'
+    ];
 
     public function client()
     {
@@ -19,6 +35,10 @@ class Reservation extends Model
     public function vehicle()
     {
         return $this->belongsTo(Vehicle::class,'vehicleId');
+    }
+    public function users()
+    {
+        return $this->belongsTo(User::class,'userId');
     }
 
     public function represent()

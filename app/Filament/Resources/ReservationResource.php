@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\IconColumn;
+use Illuminate\Support\Facades\DB;
 // use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
@@ -37,10 +38,28 @@ class ReservationResource extends Resource
     {
         $client = Client::pluck('name', 'id')->toArray();
 
-        $vehicle = Vehicle::all()->mapWithKeys(function ($vehicles) {
-            $user = User::where('id', $vehicles->userId)->first();
-            return [$vehicles->id => $vehicles->marca . ' - ' . $vehicles->modelo . ' - ' . $user->name];
-        })->toArray();
+        $vehicles = Vehicle::all()->map(function ($vehicle) {
+            return [
+                'id' => $vehicle->id,
+                'name' => $vehicle->name,
+                'details' => $vehicle->marca . ' - ' . $vehicle->placa,
+            ];
+        })->pluck('details', 'id')->toArray();
+
+        $conductores = DB::table('model_has_roles')
+            ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+            ->join('users', 'model_has_roles.model_id', '=', 'users.id')
+            ->where('roles.name', 'Conductores')
+            ->pluck('users.name', 'users.id')
+            ->toArray();
+
+
+        // $vehicle = Vehicle::all()->mapWithKeys(function ($vehicles) {
+        //     $user = User::where('id', $vehicles->userId)->first();
+        //     return [$vehicles->id => $vehicles->marca . ' - ' . $vehicles->modelo . ' - ' . $user->name];
+        // })->toArray();
+
+
 
         /** generator the number the servcie*/
 
@@ -71,12 +90,26 @@ class ReservationResource extends Resource
                                     ->noSearchResultsMessage('Cliente no encontrado')
                                     ->options($client),
 
-                                Select::make('vehicleId')
-                                    ->label('Vehiculo/Chofer')
+                                Select::make('userId')
+                                    ->label('Chofer')
                                     ->searchable()
                                     ->noSearchResultsMessage('Chofer no encontrado')
-                                    ->options($vehicle),
+                                    ->options($conductores),
 
+                                Select::make('vehicleId')
+                                    ->label('Vehiculo')
+                                    ->searchable()
+                                    ->noSearchResultsMessage('Vehiculo no encontrado')
+                                    ->options($vehicles),
+
+                                Forms\Components\DateTimePicker::make('arrivalDate')->label('Fecha de Reservacion')
+                                    ->required(),
+                            ])
+                    ]),
+                Group::make()
+                    ->schema([
+                        Section::make('')
+                            ->schema([
                                 Forms\Components\TextInput::make('min_KM')->label('Minuto Y Kilometro')
                                     ->required(),
                                 Forms\Components\TextInput::make('suitcases')->label('Maletas')
@@ -89,10 +122,8 @@ class ReservationResource extends Resource
                                     ->required()
                                     ->numeric(),
                                 Forms\Components\Hidden::make('numServcice')->default($numeroServicioConLetra)
-
                             ])
                     ]),
-
 
             ]);
     }
@@ -146,6 +177,10 @@ class ReservationResource extends Resource
                         ->searchable(),
 
                     Tables\Columns\TextColumn::make('client.phone')->icon('heroicon-m-phone')->iconColor('primary')->searchable(),
+                    Tables\Columns\TextColumn::make('arrivalDate')->icon('heroicon-m-calendar-days')->iconColor('primary')->searchable(),
+                    Tables\Columns\TextColumn::make('active')->icon('heroicon-m-banknotes')->label('estado')
+                    ->alignEnd()
+                    ->iconColor('warning'),
                     // Tables\Columns\TextColumn::make('total_cost')->icon('heroicon-m-currency-dollar')
                     //     ->alignEnd()
                     //     ->iconColor('warning'),
@@ -204,14 +239,15 @@ class ReservationResource extends Resource
                     Tables\Actions\CustomUpdateAction::make()
                         ->label('Iniciar Viaje')
                         ->recordTitle('Esta seguro de Iniciar el Viaje')
+                        ->failureNotificationTitle('no tiene vehiculo asignado')
                         ->hidden(static function ($record) {
-                            return in_array($record->status, ['COMPLETADO', 'EN PROGRESO', 'SIN ASIGNAR','REPRESENTANTE','DESP_CHOFER']);
+                            return in_array($record->status, ['COMPLETADO', 'EN PROGRESO', 'SIN ASIGNAR', 'REPRESENTANTE', 'DESP_CHOFER']);
                         }),
                     Tables\Actions\CompletedService::make()
                         ->label('Terminar Servicio')
                         ->recordTitle('Esta seguro de Terminar el Viaje')
                         ->hidden(static function ($record) {
-                            return in_array($record->status, ['COMPLETADO', 'ASIGNADO', 'SIN ASIGNAR','REPRESENTANTE','DESP_CHOFER']);
+                            return in_array($record->status, ['COMPLETADO', 'ASIGNADO', 'SIN ASIGNAR', 'REPRESENTANTE', 'DESP_CHOFER']);
                         }),
                 ])
                 // ->actions([
@@ -269,13 +305,17 @@ class ReservationResource extends Resource
                         ->searchable(),
 
                     Tables\Columns\TextColumn::make('client.phone')->icon('heroicon-m-phone')->iconColor('primary')->searchable(),
+                    Tables\Columns\TextColumn::make('arrivalDate')->icon('heroicon-m-calendar-days')->iconColor('primary')->searchable(),
                     Tables\Columns\TextColumn::make('total_cost')->icon('heroicon-m-currency-dollar')
                         ->alignEnd()
                         ->iconColor('warning'),
+                        Tables\Columns\TextColumn::make('active')->icon('heroicon-m-banknotes')->label('estado')
+                    ->alignEnd()
+                    ->iconColor('warning'),
 
-                    ImageColumn::make('vehicle.users.image')->label('Vehiculo')->height(90)->circular()->alignCenter(),
+                    ImageColumn::make('users.image')->label('Vehiculo')->height(90)->circular()->alignCenter(),
 
-                    Tables\Columns\TextColumn::make('vehicle.users.name')
+                    Tables\Columns\TextColumn::make('users.name')
                         ->icon('heroicon-m-identification')
                         ->alignCenter()
                         ->iconColor('primary')
@@ -326,6 +366,7 @@ class ReservationResource extends Resource
                     Tables\Actions\CustomUpdateAction::make()
                         ->label('Iniciar Viaje')
                         ->recordTitle('Esta seguro de Iniciar el Viaje')
+                        ->failureNotificationTitle('no tiene vehiculo asignado')
                         ->hidden(static function ($record) {
                             return in_array($record->status, ['COMPLETADO', 'EN PROGRESO', 'SIN ASIGNAR']);
                         }),
@@ -391,7 +432,7 @@ class ReservationResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $user = Auth()->user();
-        $vehicle = Vehicle::all()->where('userId', $user->id)->first();
+        // $vehicle = Vehicle::all()->where('userId', $user->id)->first();
         // dd($vehicle);
 
         if ($user->roles[0]->name === 'Administrador') {
@@ -403,14 +444,17 @@ class ReservationResource extends Resource
         if ($user->roles[0]->name === 'Super Admin') {
             return parent::getEloquentQuery();
         }
-        return parent::getEloquentQuery()->where('vehicleId', $vehicle->id);
+        if ($user->roles[0]->name === 'Representante') {
+            return parent::getEloquentQuery();
+        }
+        return parent::getEloquentQuery()->where('userId', $user->id);
     }
 
     public static function getEloquentQueryNomina(): Builder
     {
 
         return parent::getEloquentQuery()
-            ->join('vehicles', 'reservations.vehicleId', '=', 'vehicles.id')
+            ->join('users', 'reservations.userId', '=', 'users.id')
             // ->orderBy('reservations.created_at', 'DESC')
             ->select('reservations.*');
     }

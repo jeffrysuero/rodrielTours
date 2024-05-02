@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
             // $table->foreignId('clientId')->constrained('clients')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->integer('clientId');
+            $table->integer('clientId')->nullable();;
             $table->decimal('total_cost', 8, 2);
             // $table->foreignId('vehicleId')->constrained('vehicles')->cascadeOnUpdate()->cascadeOnDelete();
             $table->dateTime('start_date');
@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('numPeople')->nullable();
             $table->text('url')->nullable();
             $table->integer('vehicleId')->nullable();
+            $table->dateTime('arrivalDate')->nullable();
             $table->enum('active',['PAGOS', 'SIN PAGAR'])->default('SIN PAGAR');
             $table->string('numServcice')->nullable();
             $table->enum('status',['SIN ASIGNAR', 'COMPLETADO','ASIGNADO','EN PROGRESO','REPRESENTANTE','DESP_CHOFER'])->default('SIN ASIGNAR');

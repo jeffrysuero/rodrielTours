@@ -33,7 +33,7 @@ class EditReservation extends EditRecord
     {
         $reservation = Reservation::all()->where('id', $data['id'])->first();
         //  dd($data['vehicleId']);
-        if ($reservation && $data['vehicleId'] != null) {
+        if ($reservation && $data['userId'] != null) {
 
             $reservation->update([
                 'clientId' => $data['clientId'],
@@ -43,7 +43,9 @@ class EditReservation extends EditRecord
                 'suitcases' => $data['suitcases'],
                 'numPeople' => $data['numPeople'],
                 'total_cost' => $data['total_cost'],
-                'numServcice' => $data['numServcice']
+                'numServcice' => $data['numServcice'],
+                'userId' => $data['userId'],
+                'arrivalDate' => $data['arrivalDate'],
             ]);
             return $reservation;
         }
@@ -56,7 +58,9 @@ class EditReservation extends EditRecord
             'suitcases' => $data['suitcases'],
             'numPeople' => $data['numPeople'],
             'total_cost' => $data['total_cost'],
-            'numServcice' => $data['numServcice']
+            'numServcice' => $data['numServcice'],
+            'userId' => null,
+            'arrivalDate' => $data['arrivalDate'],
         ]);
 
         return $reservation;

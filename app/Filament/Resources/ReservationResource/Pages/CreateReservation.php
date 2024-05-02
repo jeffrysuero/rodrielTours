@@ -16,7 +16,7 @@ class CreateReservation extends CreateRecord
         $reservationId = $this->getResource()::getModel()::latest()->first()->id;
         
         $reservations = Reservation::where('id', $reservationId)->first();
-        if ($reservations->vehicleId !== null) {
+        if ($reservations->userId !== null) {
                  
             $reservations->status = 'ASIGNADO';
             $reservations->save();

@@ -144,14 +144,14 @@ class ListReservations extends ListRecords
 
         if ($user->roles[0]->name === 'Conductores') {
             $user = Auth()->user();
-            $vehicle = Vehicle::all()->where('userId', $user->id)->first();
+            // $vehicle = Vehicle::all()->where('userId', $user->id)->first();
 
             return [
                 'ASIGNADO' => Tab::make('Servicios Asignado a Choferes')
                     ->icon('heroicon-m-user-circle')
                     ->badge(Reservation::whereIn('status',['REPRESENTANTE', 'ASIGNADO'])
-                    ->where('vehicleId', $vehicle->id)
-                    // ->where('status', 'REPRESENTANTE')
+                    // ->where('vehicleId', $vehicle->id)
+                    ->where('userId', $user->id)
 
                         ->count() ?? 0)
                     ->modifyQueryUsing(function (Builder $query) {
@@ -160,7 +160,7 @@ class ListReservations extends ListRecords
 
                     'ON HOLD' => Tab::make('En espera a Recojer pasajero')
                     ->icon('heroicon-m-exclamation-triangle')
-                    ->badge(Reservation::where('status', 'DESP_CHOFER')->where('vehicleId', $vehicle->id)
+                    ->badge(Reservation::where('status', 'DESP_CHOFER')->where('userId', $user->id)
 
                         ->count() ?? 0)
                     ->modifyQueryUsing(function (Builder $query) {
@@ -169,7 +169,7 @@ class ListReservations extends ListRecords
 
                 'EN PROGRESO' => Tab::make('Servicios en Progreso')
                     ->icon('heroicon-m-exclamation-triangle')
-                    ->badge(Reservation::where('status', 'EN PROGRESO')->where('vehicleId', $vehicle->id)
+                    ->badge(Reservation::where('status', 'EN PROGRESO')->where('userId', $user->id)
 
                         ->count() ?? 0)
                     ->modifyQueryUsing(function (Builder $query) {
@@ -178,7 +178,7 @@ class ListReservations extends ListRecords
 
                 'COMPLETADO' => Tab::make('Servicios Completados')
                     ->icon('heroicon-m-hand-thumb-up')
-                    ->badge(Reservation::where('status', 'COMPLETADO')->where('vehicleId', $vehicle->id)
+                    ->badge(Reservation::where('status', 'COMPLETADO')->where('userId', $user->id)
 
                         ->count() ?? 0)
                     ->modifyQueryUsing(function (Builder $query) {

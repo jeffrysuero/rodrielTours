@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\VehicleResource\Pages;
+namespace App\Filament\Resources\ListChoferResource\Pages;
 
 use App\Filament\Resources\Blog\PostResource;
+use App\Filament\Resources\ListChoferResource;
 use App\Filament\Resources\ReservationResource;
 use App\Filament\Resources\UserResource;
 use App\Filament\Resources\VehicleResource;
 use App\Models\ReservactionVehicle;
 use App\Models\Reservation;
+use App\Models\User;
 use App\Models\Vehicle;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -27,7 +29,7 @@ use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
 class CompletedPay extends ManageRelatedRecords
 {
-    protected static string $resource = VehicleResource::class;
+    protected static string $resource = ListChoferResource::class;
 
     protected static string $relationship = 'reservations';
     // protected static ?string $relationship = null;
@@ -58,14 +60,14 @@ class CompletedPay extends ManageRelatedRecords
     {
         $record = $this->getRecord();
 
-        $totalCost = Reservation::where('vehicleId', $record->id)
+        $totalCost = Reservation::where('userId', $record->id)
             ->where('status', 'COMPLETADO')
             ->where('active', 'SIN PAGAR')
             ->selectRaw('SUM(total_cost) as total')
-            ->groupBy('vehicleId')
+            ->groupBy('userId')
             ->first();
 
-        $porc = Vehicle::where('id', $record->id)->first();
+        $porc = User::where('id', $record->id)->first();
         // dd($porc->percentage);
         if ($totalCost && $porc) {
             $total = $totalCost->total * $porc->percentage / 100;
@@ -78,7 +80,7 @@ class CompletedPay extends ManageRelatedRecords
             ->query(
                 ReservationResource::getEloquentQueryNomina()
                     ->where('status', 'COMPLETADO')
-                    ->where('vehicleId', $record->id)
+                    ->where('userId', $record->id)
                     ->where('active', 'SIN PAGAR')
             )
 

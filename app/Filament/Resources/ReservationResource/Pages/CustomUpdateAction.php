@@ -19,6 +19,9 @@ class CustomUpdateAction extends Action
     protected function setUp(): void
     {
         parent::setUp();
+        $this->label(__('Iniciar Viaje'));
+
+        $this->recordTitle(__('¿Está seguro de iniciar el viaje?'));
 
         $this->label(__('filament-actions::delete.single.label'));
 
@@ -37,27 +40,22 @@ class CustomUpdateAction extends Action
         $this->modalIcon(FilamentIcon::resolve('actions::delete-action.modal') ?? 'heroicon-o-truck');
 
         $this->hidden(static function (Model $record): bool {
-            if (! method_exists($record, 'trashed')) {
+            if (!method_exists($record, 'trashed')) {
                 return false;
             }
 
             return $record->trashed();
         });
-
-        $this->action(function (): void {
-            $result = $this->process(static function (Model $record) {
-                $record->update(['status' => 'EN PROGRESO','dateInitiated' => Carbon::now()]);
-        
-                return true;
-            });
-
-            if (! $result) {
-                $this->failure();
-
-                return;
+        $self = $this;
+        $this->action(function (Model $record) use ($self) {
+            if (!$record->vehicleId) {
+    
+                return $self->failure();
             }
 
-            $this->success();
+            $record->update(['status' => 'EN PROGRESO', 'dateInitiated' => Carbon::now()]);
+
+            return $self->success();
         });
     }
 }

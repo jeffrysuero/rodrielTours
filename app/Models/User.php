@@ -25,7 +25,8 @@ class User extends Authenticatable
         'email',
         'password',
         'image',
-        'view'
+        'view',
+        'percentage'
     ];
 
     /**
@@ -48,7 +49,10 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class, 'userId');
+    }
      public function canAccessPanel(Panel $panel): bool
     {
         return $this->hasRole('Administrador');

@@ -30,7 +30,13 @@ class RepresentResource extends Resource
     protected static ?string $navigationLabel = 'Servicios Representante';
     public static function form(Form $form): Form
     {
-        // $represent = User::where('')->pluck('name', 'id')->toArray();
+        $vehicles = Vehicle::all()->map(function ($vehicle) {
+            return [
+                'id' => $vehicle->id,
+                'name' => $vehicle->name,
+                'details' => $vehicle->marca . ' - ' . $vehicle->placa,
+            ];
+        })->pluck('details', 'id')->toArray();
 
         $modelRole = DB::table('model_has_roles')
             ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
@@ -44,10 +50,16 @@ class RepresentResource extends Resource
             $modelRoleOptions[$user->id] = $user->name;
         }
 
-        $vehicle = Vehicle::all()->mapWithKeys(function ($vehicles) {
-            $user = User::where('id', $vehicles->userId)->first();
-            return [$vehicles->id => $vehicles->marca . ' - ' . $vehicles->modelo . ' - ' . $user->name];
-        })->toArray();
+        // $vehicle = Vehicle::all()->mapWithKeys(function ($vehicles) {
+        //     $user = User::where('id', $vehicles->userId)->first();
+        //     return [$vehicles->id => $vehicles->marca . ' - ' . $vehicles->modelo . ' - ' . $user->name];
+        // })->toArray();
+        $conductores = DB::table('model_has_roles')
+        ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+        ->join('users', 'model_has_roles.model_id', '=', 'users.id')
+        ->where('roles.name', 'Conductores')
+        ->pluck('users.name', 'users.id')
+        ->toArray();
 
         $reservation = Reservation::where('status', 'SIN ASIGNAR')->get();
         $reservationOptions = $reservation->pluck('numServcice', 'id')->toArray();
@@ -65,12 +77,19 @@ class RepresentResource extends Resource
                                     ->noSearchResultsMessage('Cliente no encontrado')
                                     ->options($modelRoleOptions),
 
-                                Select::make('vehicleId')
-                                    ->label('Vehiculo/Chofer')
+                                Select::make('choferId')
+                                    ->label('Chofer')
                                     ->required()
                                     ->searchable()
                                     ->noSearchResultsMessage('Chofer no encontrado')
-                                    ->options($vehicle),
+                                    ->options($conductores),
+
+                                    Select::make('vehicleId')
+                                    ->label('Vehiculo')
+                                    ->required()
+                                    ->searchable()
+                                    ->noSearchResultsMessage('Vehiculo no encontrado')
+                                    ->options($vehicles),
 
                                 Select::make('reservationId')
                                     ->label('Servicios')
@@ -199,7 +218,7 @@ class RepresentResource extends Resource
                     ->recordTitle('Esta seguro de de Despachar')
                     ->hidden(static function ($record) {
                         $reserv = Reservation::findOrFail($record->reservationId);
-                            return $reserv->status !== 'DESP_CHOFER';
+                        return $reserv->status !== 'DESP_CHOFER';
                     }),
 
 
@@ -265,9 +284,10 @@ class RepresentResource extends Resource
             });
         }
 
-        return parent::getEloquentQuery()->whereHas('reservations', function ($query) {
-            $user = Auth()->user();
-            $query->where('status', 'REPRESENTANTE')->where('userId', $user->id);
-        });
+        // return parent::getEloquentQuery()->whereHas('reservations', function ($query) {
+            //     $query->where('status', 'REPRESENTANTE')->where('userId', $user->id);
+            // });
+        $user = Auth()->user();
+        return parent::getEloquentQuery()->where('userId', $user->id);
     }
 }
