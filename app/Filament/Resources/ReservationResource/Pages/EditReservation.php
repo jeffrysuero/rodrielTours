@@ -46,6 +46,7 @@ class EditReservation extends EditRecord
                 'numServcice' => $data['numServcice'],
                 'userId' => $data['userId'],
                 'arrivalDate' => $data['arrivalDate'],
+                'hour' => $data['hour'],
             ]);
             return $reservation;
         }
@@ -61,6 +62,7 @@ class EditReservation extends EditRecord
             'numServcice' => $data['numServcice'],
             'userId' => null,
             'arrivalDate' => $data['arrivalDate'],
+            'hour' => $data['hour'],
         ]);
 
         return $reservation;

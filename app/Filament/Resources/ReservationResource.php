@@ -26,6 +26,8 @@ use Filament\Tables\Columns\IconColumn;
 use Illuminate\Support\Facades\DB;
 // use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use Filament\Forms\Components;
+use Filament\Forms\Components\TimePicker;
 
 class ReservationResource extends Resource
 {
@@ -86,6 +88,7 @@ class ReservationResource extends Resource
                                 Forms\Components\Hidden::make('id')->label('Id'),
                                 Select::make('clientId')
                                     ->label('Cliente')
+                                    ->required()
                                     ->searchable()
                                     ->noSearchResultsMessage('Cliente no encontrado')
                                     ->options($client),
@@ -102,8 +105,21 @@ class ReservationResource extends Resource
                                     ->noSearchResultsMessage('Vehiculo no encontrado')
                                     ->options($vehicles),
 
-                                Forms\Components\DateTimePicker::make('arrivalDate')->label('Fecha de Reservacion')
+                                Components\DatePicker::make('arrivalDate')
+                                    ->label('Fecha de Reservacion')
+                                    ->displayFormat('d/m/Y')
                                     ->required(),
+
+
+
+                                TimePicker::make('hour')
+                                    ->prefixIcon('heroicon-m-check-circle')
+                                    ->Format('h:m:m A')
+                                    ->prefixIconColor('success')
+
+
+
+
                             ])
                     ]),
                 Group::make()
@@ -179,11 +195,19 @@ class ReservationResource extends Resource
                     Tables\Columns\TextColumn::make('client.phone')->icon('heroicon-m-phone')->iconColor('primary')->searchable(),
                     Tables\Columns\TextColumn::make('arrivalDate')->icon('heroicon-m-calendar-days')->iconColor('primary')->searchable(),
                     Tables\Columns\TextColumn::make('active')->icon('heroicon-m-banknotes')->label('estado')
-                    ->alignEnd()
-                    ->iconColor('warning'),
+                        ->alignEnd()
+                        ->iconColor('warning'),
                     // Tables\Columns\TextColumn::make('total_cost')->icon('heroicon-m-currency-dollar')
                     //     ->alignEnd()
                     //     ->iconColor('warning'),
+
+                    ImageColumn::make('users.image')->label('User')->height(90)->circular()->alignCenter(),
+
+                    Tables\Columns\TextColumn::make('users.name')
+                        ->icon('heroicon-m-identification')
+                        ->alignCenter()
+                        ->iconColor('primary')
+                        ->searchable(),
 
                     ImageColumn::make('vehicle.image')->label('Vehiculo')->height(90)->circular()->alignCenter(),
                     Tables\Columns\TextColumn::make('vehicle.placa')
@@ -193,18 +217,20 @@ class ReservationResource extends Resource
                         ->searchable(),
 
 
-                    ImageColumn::make('vehicle.users.image')->label('Vehiculo')->height(90)->circular()->alignCenter(),
 
-                    Tables\Columns\TextColumn::make('vehicle.users.name')
-                        ->icon('heroicon-m-identification')
-                        ->alignCenter()
+
+                    Tables\Columns\TextColumn::make('users.phone')->icon('heroicon-m-phone')->iconColor('primary')->searchable(),
+
+                    Tables\Columns\TextColumn::make('arrivalDate')
+                        ->icon('heroicon-m-calendar-days')
                         ->iconColor('primary')
                         ->searchable(),
-                        
-                        Tables\Columns\TextColumn::make('users.phone')->icon('heroicon-m-phone')->iconColor('primary')->searchable(),
 
-                        Tables\Columns\TextColumn::make('arrivalDate')->icon('heroicon-m-calendar-days')->iconColor('primary')->searchable(),
-        
+                    Tables\Columns\TextColumn::make('hour')
+                        ->icon('heroicon-m-clock')
+                        ->iconColor('primary')
+                        ->searchable(),
+
 
                     Tables\Columns\TextColumn::make('status')->icon('heroicon-m-swatch')
                         ->iconColor('success'),
@@ -311,12 +337,11 @@ class ReservationResource extends Resource
 
                     Tables\Columns\TextColumn::make('client.phone')->icon('heroicon-m-phone')->iconColor('primary')->searchable(),
                     Tables\Columns\TextColumn::make('arrivalDate')->icon('heroicon-m-calendar-days')->iconColor('primary')->searchable(),
-                    Tables\Columns\TextColumn::make('total_cost')->icon('heroicon-m-currency-dollar')
+                    Tables\Columns\TextColumn::make('total_cost')->icon('heroicon-m-currency-dollar')->alignEnd()
+                        ->iconColor('warning'),
+                    Tables\Columns\TextColumn::make('active')->icon('heroicon-m-banknotes')->label('estado')
                         ->alignEnd()
                         ->iconColor('warning'),
-                        Tables\Columns\TextColumn::make('active')->icon('heroicon-m-banknotes')->label('estado')
-                    ->alignEnd()
-                    ->iconColor('warning'),
 
                     ImageColumn::make('users.image')->label('Vehiculo')->height(90)->circular()->alignCenter(),
 
@@ -333,10 +358,21 @@ class ReservationResource extends Resource
                         ->iconColor('primary')
                         ->searchable(),
 
-                        Tables\Columns\TextColumn::make('users.phone')->icon('heroicon-m-phone')->iconColor('primary')->searchable(),
+                    Tables\Columns\TextColumn::make('users.phone')->icon('heroicon-m-phone')->iconColor('primary')->searchable(),
 
-                        Tables\Columns\TextColumn::make('arrivalDate')->icon('heroicon-m-calendar-days')->iconColor('primary')->searchable(),
-        
+                    Tables\Columns\TextColumn::make('arrivalDate')
+                        ->icon('heroicon-m-calendar-days')
+                        ->iconColor('primary')
+                        ->searchable(),
+                        
+                    Tables\Columns\TextColumn::make('hour')
+                        ->icon('heroicon-m-clock')
+                        ->iconColor('primary')
+                        ->searchable(),
+
+
+
+
 
                     Tables\Columns\TextColumn::make('status')->icon('heroicon-m-swatch')
                         ->iconColor('success'),

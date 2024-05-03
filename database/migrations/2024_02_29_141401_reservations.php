@@ -24,7 +24,8 @@ return new class extends Migration
             $table->string('numPeople')->nullable();
             $table->text('url')->nullable();
             $table->integer('vehicleId')->nullable();
-            $table->dateTime('arrivalDate')->nullable();
+            $table->string('arrivalDate')->nullable();
+            $table->string('hour')->nullable();
             $table->enum('active',['PAGOS', 'SIN PAGAR'])->default('SIN PAGAR');
             $table->string('numServcice')->nullable();
             $table->enum('status',['SIN ASIGNAR', 'COMPLETADO','ASIGNADO','EN PROGRESO','REPRESENTANTE','DESP_CHOFER'])->default('SIN ASIGNAR');
