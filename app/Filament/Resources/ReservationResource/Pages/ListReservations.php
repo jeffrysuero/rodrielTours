@@ -37,11 +37,11 @@ class ListReservations extends ListRecords
                     }),
                 'ASIGNADO' => Tab::make('Servicios Asignado a Choferes')
                     ->icon('heroicon-m-user-circle')
-                    ->badge(Reservation::where('status', 'ASIGNADO')
+                    ->badge(Reservation::whereIn('status',['REPRESENTANTE','ASIGNADO'])
 
                         ->count() ?? 0)
                     ->modifyQueryUsing(function (Builder $query) {
-                        return $query->where('status', 'ASIGNADO');
+                        return $query->whereIn('status',['REPRESENTANTE','ASIGNADO']);
                     }),
 
                 'EN PROGRESO' => Tab::make('Servicios en Progreso')
@@ -76,7 +76,7 @@ class ListReservations extends ListRecords
                     }),
                 'ASIGNADO' => Tab::make('Servicios Asignado a Choferes')
                     ->icon('heroicon-m-user-circle')
-                    ->badge(Reservation::where('status', 'ASIGNADO')
+                    ->badge(Reservation::whereIn('status',['REPRESENTANTE','ASIGNADO'])
 
                         ->count() ?? 0)
                     ->modifyQueryUsing(function (Builder $query) {
@@ -115,11 +115,11 @@ class ListReservations extends ListRecords
                     }),
                 'ASIGNADO' => Tab::make('Servicios Asignado a Choferes')
                     ->icon('heroicon-m-user-circle')
-                    ->badge(Reservation::where('status', 'ASIGNADO')
+                    ->badge(Reservation::whereIn('status',['REPRESENTANTE','ASIGNADO'])
 
                         ->count() ?? 0)
                     ->modifyQueryUsing(function (Builder $query) {
-                        return $query->where('status', 'ASIGNADO');
+                        return $query->whereIn('status',['REPRESENTANTE','ASIGNADO']);
                     }),
 
                 'EN PROGRESO' => Tab::make('Servicios en Progreso')

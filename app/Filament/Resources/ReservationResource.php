@@ -34,7 +34,7 @@ class ReservationResource extends Resource
     protected static ?string $model = Reservation::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
-    protected static ?string $navigationLabel = 'Servicios';
+    protected static ?string $navigationLabel = 'Reservaciones';
 
     public static function form(Form $form): Form
     {
@@ -219,7 +219,7 @@ class ReservationResource extends Resource
 
 
 
-                    Tables\Columns\TextColumn::make('users.phone')->icon('heroicon-m-phone')->iconColor('primary')->searchable(),
+                    Tables\Columns\TextColumn::make('users.phone')->icon('heroicon-m-phone')->iconColor('primary')->searchable()->alignCenter(),
 
                     Tables\Columns\TextColumn::make('arrivalDate')
                         ->icon('heroicon-m-calendar-days')
@@ -231,6 +231,12 @@ class ReservationResource extends Resource
                         ->iconColor('primary')
                         ->searchable(),
 
+
+                        Tables\Columns\TextColumn::make('represent.users.name')
+                        ->icon('heroicon-m-user-circle')
+                        ->iconColor('success')
+                        ->searchable()
+                        ->alignEnd(),
 
                     Tables\Columns\TextColumn::make('status')->icon('heroicon-m-swatch')
                         ->iconColor('success'),
@@ -358,13 +364,13 @@ class ReservationResource extends Resource
                         ->iconColor('primary')
                         ->searchable(),
 
-                    Tables\Columns\TextColumn::make('users.phone')->icon('heroicon-m-phone')->iconColor('primary')->searchable(),
+                    Tables\Columns\TextColumn::make('users.phone')->icon('heroicon-m-phone')->iconColor('primary')->searchable()->alignCenter(),
 
                     Tables\Columns\TextColumn::make('arrivalDate')
                         ->icon('heroicon-m-calendar-days')
                         ->iconColor('primary')
                         ->searchable(),
-                        
+
                     Tables\Columns\TextColumn::make('hour')
                         ->icon('heroicon-m-clock')
                         ->iconColor('primary')
@@ -372,10 +378,15 @@ class ReservationResource extends Resource
 
 
 
-
+                        Tables\Columns\TextColumn::make('represent.users.name')
+                        ->icon('heroicon-m-user-circle')
+                        ->iconColor('success')
+                        ->searchable()
+                        ->alignEnd(),
 
                     Tables\Columns\TextColumn::make('status')->icon('heroicon-m-swatch')
-                        ->iconColor('success'),
+                        ->iconColor('success')
+                        ->alignEnd(),
                 ]),
             ])
 
@@ -414,13 +425,13 @@ class ReservationResource extends Resource
                         ->recordTitle('Esta seguro de Iniciar el Viaje')
                         ->failureNotificationTitle('no tiene vehiculo asignado')
                         ->hidden(static function ($record) {
-                            return in_array($record->status, ['COMPLETADO', 'EN PROGRESO', 'SIN ASIGNAR']);
+                            return in_array($record->status, ['COMPLETADO', 'REPRESENTANTE','EN PROGRESO', 'SIN ASIGNAR']);
                         }),
                     Tables\Actions\CompletedService::make()
                         ->label('Terminar Servicio')
                         ->recordTitle('Esta seguro de Terminar el Viaje')
                         ->hidden(static function ($record) {
-                            return in_array($record->status, ['COMPLETADO', 'ASIGNADO', 'SIN ASIGNAR']);
+                            return in_array($record->status, ['COMPLETADO', 'ASIGNADO','REPRESENTANTE', 'SIN ASIGNAR']);
                         }),
 
 

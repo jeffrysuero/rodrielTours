@@ -56,19 +56,19 @@ class StatsOverview extends BaseWidget
         if ($user->roles[0]->name === 'Administrador') {
             return [
                 Stat::make('Total Choferes ', User::where('name', '!=', 'admin')->count())
-                    ->description('Increasing Choferes')
+                    ->description('Choferes')
                     ->descriptionIcon('heroicon-m-arrow-trending-up')
                     ->color('primary')
                     ->chart([6, 4, 9, 5, 3, 0, 7]),
 
                 Stat::make('Total Clientes ', Client::count())
-                    ->description('Increasing Clientes')
+                    ->description('Clientes')
                     ->descriptionIcon('heroicon-m-arrow-trending-up')
                     ->color('primary')
                     ->chart([6, 4, 9, 5, 3, 0, 7]),
 
                 Stat::make('Total por Servicios $', value(array_sum($data)))
-                    ->description('Increasing Reservaciones')
+                    ->description(' Reservaciones')
                     ->descriptionIcon('heroicon-m-arrow-trending-up')
                     ->color('warning')
                     ->chart($data),
@@ -76,7 +76,7 @@ class StatsOverview extends BaseWidget
                 Stat::make('Total Servicios Completados $', Reservation::where('status', 'COMPLETADO')
                     ->whereBetween('updated_at', [$startDate, $endDate])
                     ->sum('total_cost'))
-                    ->description('Increasing Reservaciones')
+                    ->description('Reservaciones')
                     ->descriptionIcon('heroicon-m-arrow-trending-up')
                     ->color('success')
                     ->chart([1, 9, 9, 8, 3, 7, 7]),
@@ -101,19 +101,19 @@ class StatsOverview extends BaseWidget
         if ($user->roles[0]->name === 'Operador') {
             return [
                 Stat::make('Total Choferes ', User::where('name', '!=', 'admin')->count())
-                    ->description('Increasing Choferes')
+                    ->description('Choferes')
                     ->descriptionIcon('heroicon-m-arrow-trending-up')
                     ->color('primary')
                     ->chart([6, 4, 9, 5, 3, 0, 7]),
 
                 Stat::make('Total Clientes ', Client::count())
-                    ->description('Increasing Clientes')
+                    ->description('Clientes')
                     ->descriptionIcon('heroicon-m-arrow-trending-up')
                     ->color('primary')
                     ->chart([6, 4, 9, 5, 3, 0, 7]),
 
                 Stat::make('Total por Servicios $', value(array_sum($data)))
-                    ->description('Increasing Reservaciones')
+                    ->description('Reservaciones')
                     ->descriptionIcon('heroicon-m-arrow-trending-up')
                     ->color('warning')
                     ->chart($data),
@@ -121,7 +121,7 @@ class StatsOverview extends BaseWidget
                 Stat::make('Total Servicios Completados $', Reservation::where('status', 'COMPLETADO')
                     ->whereBetween('updated_at', [$startDate, $endDate])
                     ->sum('total_cost'))
-                    ->description('Increasing Reservaciones')
+                    ->description('Reservaciones')
                     ->descriptionIcon('heroicon-m-arrow-trending-up')
                     ->color('success')
                     ->chart([1, 9, 9, 8, 3, 7, 7]),
@@ -145,19 +145,19 @@ class StatsOverview extends BaseWidget
         if ($user->roles[0]->name === 'Super Admin') {
             return [
                 Stat::make('Total Choferes ', User::where('name', '!=', 'admin')->count())
-                    ->description('Increasing Choferes')
+                    ->description('Choferes')
                     ->descriptionIcon('heroicon-m-arrow-trending-up')
                     ->color('primary')
                     ->chart([6, 4, 9, 5, 3, 0, 7]),
 
                 Stat::make('Total Clientes ', Client::count())
-                    ->description('Increasing Clientes')
+                    ->description('Clientes')
                     ->descriptionIcon('heroicon-m-arrow-trending-up')
                     ->color('primary')
                     ->chart([6, 4, 9, 5, 3, 0, 7]),
 
                 Stat::make('Total por Servicios $', value(array_sum($data)))
-                    ->description('Increasing Reservaciones')
+                    ->description('Reservaciones')
                     ->descriptionIcon('heroicon-m-arrow-trending-up')
                     ->color('warning')
                     ->chart($data),
@@ -165,7 +165,7 @@ class StatsOverview extends BaseWidget
                 Stat::make('Total Servicios Completados $', Reservation::where('status', 'COMPLETADO')
                     ->whereBetween('updated_at', [$startDate, $endDate])
                     ->sum('total_cost'))
-                    ->description('Increasing Reservaciones')
+                    ->description('Reservaciones')
                     ->descriptionIcon('heroicon-m-arrow-trending-up')
                     ->color('success')
                     ->chart([1, 9, 9, 8, 3, 7, 7]),
