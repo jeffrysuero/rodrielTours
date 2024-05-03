@@ -328,6 +328,11 @@ class ReservationResource extends Resource
                         ->iconColor('primary')
                         ->searchable(),
 
+                        Tables\Columns\TextColumn::make('users.phone')->icon('heroicon-m-phone')->iconColor('primary')->searchable(),
+
+                        Tables\Columns\TextColumn::make('arrivalDate')->icon('heroicon-m-calendar-days')->iconColor('primary')->searchable(),
+        
+
                     Tables\Columns\TextColumn::make('status')->icon('heroicon-m-swatch')
                         ->iconColor('success'),
                 ]),
