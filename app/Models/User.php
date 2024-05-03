@@ -26,7 +26,8 @@ class User extends Authenticatable
         'password',
         'image',
         'view',
-        'percentage'
+        'percentage',
+        'phone'
     ];
 
     /**

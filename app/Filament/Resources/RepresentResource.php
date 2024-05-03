@@ -148,9 +148,9 @@ class RepresentResource extends Resource
 
                 Tables\Columns\TextColumn::make('reservations.client.phone')->icon('heroicon-m-phone')->iconColor('primary')->searchable(),
 
-                ImageColumn::make('vehicle.users.image')->label('Vehiculo')->height(90)->circular()->alignCenter(),
+                ImageColumn::make('reservations.users.image')->label('Vehiculo')->height(90)->circular()->alignCenter(),
 
-                Tables\Columns\TextColumn::make('vehicle.users.name')
+                Tables\Columns\TextColumn::make('reservations.users.name')
                     ->icon('heroicon-m-identification')
                     ->alignCenter()
                     ->iconColor('primary')
@@ -162,6 +162,11 @@ class RepresentResource extends Resource
                     ->alignCenter()
                     ->iconColor('primary')
                     ->searchable(),
+
+                 Tables\Columns\TextColumn::make('reservations.users.phone')->icon('heroicon-m-phone')->iconColor('primary')->searchable(),
+
+                Tables\Columns\TextColumn::make('reservations.arrivalDate')->icon('heroicon-m-calendar-days')->iconColor('primary')->searchable(),
+
 
                 // Tables\Columns\TextColumn::make('reservations.status')->icon('heroicon-m-swatch')
                 //     ->iconColor('success'),

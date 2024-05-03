@@ -55,6 +55,12 @@ class ListChoferResource extends Resource
                             ->password()
                             ->required()
                             ->maxLength(255),
+                            Forms\Components\TextInput::make('phone')->label('Telefono')
+                            ->tel()
+                            ->unique(ignoreRecord: true)
+                            ->required()
+                            ->maxValue(15)
+                            ->maxLength(255),
 
                         FileUpload::make('image')
                             ->image()
@@ -88,6 +94,8 @@ class ListChoferResource extends Resource
                     ->height(60)
                     ->circular(),
                     Tables\Columns\TextColumn::make('percentage')->label('Porcentage Ganancias')
+                    ->searchable(),
+                    Tables\Columns\TextColumn::make('phone')->label('Telefono')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
