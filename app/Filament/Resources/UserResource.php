@@ -106,7 +106,7 @@ class UserResource extends Resource
             ])
             ->actions([
                 // Tables\Actions\ActionGroup::make([
-                // Tables\Actions\ViewAction::make()->color('info')->label('Editar'),
+                Tables\Actions\ViewAction::make()->color('info')->label('Ver'),
                 Tables\Actions\EditAction::make()->color('warning')->label('Editar'),
                 Tables\Actions\DeleteAction::make()->label('Eliminar'),
                 // ])
