@@ -39,7 +39,7 @@ class EditReservation extends EditRecord
 
                 $reservation->update([
                     'clientId' => $data['clientId'],
-                    'status' => 'REPRESENTANTE',
+                    'status' => 'ASIGNADO',
                     'vehicleId' => $data['vehicleId'],
                     'min_KM' => $data['min_KM'],
                     'suitcases' => $data['suitcases'],

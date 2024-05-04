@@ -167,7 +167,17 @@ class RepresentResource extends Resource
 
                 Tables\Columns\TextColumn::make('reservations.arrivalDate')->icon('heroicon-m-calendar-days')->iconColor('primary')->searchable(),
 
+                Tables\Columns\TextColumn::make('.users.name')
+                ->icon('heroicon-m-user-circle')
+                ->iconColor('success')
+                ->searchable()
+                ->alignEnd(),
 
+                Tables\Columns\TextColumn::make('users.name')
+                ->icon('heroicon-m-user-circle')
+                ->iconColor('success')
+                ->searchable()
+                ->alignEnd(),
                 // Tables\Columns\TextColumn::make('reservations.status')->icon('heroicon-m-swatch')
                 //     ->iconColor('success'),
             ]),
