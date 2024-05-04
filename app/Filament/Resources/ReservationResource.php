@@ -79,6 +79,18 @@ class ReservationResource extends Resource
             $existe = Reservation::where('numServcice', $numeroServicioConLetra)->exists();
         }
         /**  */
+
+        $modelRole = DB::table('model_has_roles')
+        ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+        ->join('users', 'model_has_roles.model_id', '=', 'users.id')
+        ->where('roles.name', 'Representante')
+        ->select('users.*', 'roles.name as role')
+        ->get()->toArray();
+
+    $modelRoleOptions = [];
+    foreach ($modelRole as $user) {
+        $modelRoleOptions[$user->id] = $user->name;
+    }
         return $form
             ->schema([
                 Group::make()
@@ -134,9 +146,18 @@ class ReservationResource extends Resource
                                 Forms\Components\TextInput::make('numPeople')->label('Numero de Persona')
                                     ->required()
                                     ->numeric(),
+                                    
                                 Forms\Components\TextInput::make('total_cost')->label('Costo Total')
                                     ->required()
                                     ->numeric(),
+
+                                    Select::make('representId')
+                                    ->label('Representante')
+                                    // ->required()
+                                    ->searchable()
+                                    ->noSearchResultsMessage('Cliente no encontrado')
+                                    ->options($modelRoleOptions),
+
                                 Forms\Components\Hidden::make('numServcice')->default($numeroServicioConLetra)
                             ])
                     ]),

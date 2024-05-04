@@ -25,7 +25,8 @@ class Reservation extends Model
         'finishTrip',
         'userId',
         'arrivalDate',
-        'hour'
+        'hour',
+        'representId'
     ];
 
     public function client()

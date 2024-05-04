@@ -61,7 +61,7 @@ class RepresentResource extends Resource
         ->pluck('users.name', 'users.id')
         ->toArray();
 
-        $reservation = Reservation::where('status', 'SIN ASIGNAR')->get();
+        $reservation = Reservation::where('status', 'SIN ASIGNAR','ASIGNADO')->get();
         $reservationOptions = $reservation->pluck('numServcice', 'id')->toArray();
 
         return $form
