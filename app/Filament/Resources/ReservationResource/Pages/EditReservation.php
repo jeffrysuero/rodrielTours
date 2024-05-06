@@ -11,6 +11,7 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Represent;
+use App\Models\User;
 
 class EditReservation extends EditRecord
 {
@@ -147,4 +148,39 @@ class EditReservation extends EditRecord
 
         return $reservation;
     }
+
+    protected function afterSave(): void
+    {
+        $reservation = $this->getResource()::getModel()::latest()->first();
+        $data = $this->record;
+
+        if ($reservation->userId !== null) {
+
+            $userId = $reservation->userId;
+
+            $user = User::find($userId);
+
+            if ($user) {
+                Notification::make()
+                    ->success()
+                    ->title('Nueva Reservacion')
+                    ->body('Reservacion asignado al chofer : ' . $user->name)
+                    ->actions([
+                        Action::make('ver')->url(
+                            ReservationResource::getUrl('index', ['record' => $data])
+                        )
+                            ->button()
+                            ->markAsRead()
+
+                    ])
+                    ->sendToDatabase($user);
+               
+            } else {
+                // dd("Usuario no encontrado");
+            }
+        } else {
+            // dd("No se envió ninguna notificación porque userId es nulo");
+        }
+    }
+    
 }

@@ -307,6 +307,14 @@ class ReservationResource extends Resource
                         ->hidden(static function ($record) {
                             return in_array($record->status, ['COMPLETADO', 'ASIGNADO', 'SIN ASIGNAR', 'REPRESENTANTE', 'DESP_CHOFER']);
                         }),
+
+                        Tables\Actions\RepresenChofer::make()
+                        ->label('Estoy Aqui')
+                        ->recordTitle('Esta seguro de que has llegado')
+                        ->hidden(static function ($record) {
+        
+                            return $record->arrive !== 0;
+                        }),
                 ])
                 // ->actions([
 

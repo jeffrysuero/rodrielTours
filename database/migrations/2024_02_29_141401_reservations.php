@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('hour')->nullable();
             $table->enum('active',['PAGOS', 'SIN PAGAR'])->default('SIN PAGAR');
             $table->string('numServcice')->nullable();
+            $table->boolean('arrive')->default(false);
             $table->enum('status',['SIN ASIGNAR', 'COMPLETADO','ASIGNADO','EN PROGRESO','REPRESENTANTE','DESP_CHOFER'])->default('SIN ASIGNAR');
             $table->timestamp('dateInitiated')->nullable();
             $table->timestamp('pickUpClient')->nullable();

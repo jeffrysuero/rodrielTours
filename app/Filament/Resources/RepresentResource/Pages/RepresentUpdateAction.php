@@ -3,7 +3,9 @@
 namespace Filament\Tables\Actions;
 
 use App\Models\Reservation;
+use App\Models\User;
 use Filament\Actions\Concerns\CanCustomizeProcess;
+use Filament\Notifications\Notification;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -46,12 +48,24 @@ class RepresentUpdateAction extends Action
 
         $this->action(function (): void {
             $result = $this->process(static function (Model $record) {
-                // dd($record->reservationId);
-
+               
                 $reserv = Reservation::all()->where('id',$record->reservationId)->first();
             
                 $reserv->update(['status' => 'DESP_CHOFER']);
-        //867885Y
+        
+                $chofer = User::find($record->choferId);
+
+                if ($chofer) {
+                    Notification::make()
+                        ->success()
+                        ->title('El Representante ya tienen el Cliente')
+                        ->body('Reprentante esperando con el cliente para abordar')
+                        
+                        ->sendToDatabase($chofer);
+                } else {
+                    // dd("Usuario no encontrado");
+                }
+
                 return true;
             });
 
