@@ -1,22 +1,20 @@
 <?php
 
-namespace App\Filament\Resources\ReservationResource\Pages;
+namespace App\Filament\Resources\TransferzResource\Pages;
 
-use App\Filament\Resources\ReservationResource;
-use App\Models\Reservation;
+use App\Filament\Resources\TransferzResource;
+use App\Models\Represent;
+use App\Models\Transferz;
+use App\Models\User;
 use Filament\Actions;
-// use Filament\Actions\Action;
-use Filament\Notifications\Actions\Action;
+use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
+
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Represent;
-use App\Models\User;
-
-class EditReservation extends EditRecord
+class EditTransferz extends EditRecord
 {
-    protected static string $resource = ReservationResource::class;
-
+    protected static string $resource = TransferzResource::class;
 
     protected function getHeaderActions(): array
     {
@@ -31,64 +29,44 @@ class EditReservation extends EditRecord
         return $this->getResource()::getUrl('index');
     }
 
+
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
         // dd($data['representId']);
-        $reservation = Reservation::all()->where('id', $data['id'])->first();
+        $reservation = Transferz::all()->where('id', $data['id'])->first();
         if ($reservation && $data['userId'] != null) {
               if($data['representId'] === null){
 
                 $reservation->update([
-                    'clientId' => $data['clientId'],
+                
                     'status' => 'ASIGNADO',
                     'vehicleId' => $data['vehicleId'],
-                    'min_KM' => $data['min_KM'],
-                    'suitcases' => $data['suitcases'],
-                    'numPeople' => $data['numPeople'],
-                    'total_cost' => $data['total_cost'],
-                    'numServcice' => $data['numServcice'],
                     'userId' => $data['userId'],
-                    'arrivalDate' => $data['arrivalDate'],
-                    'hour' => $data['hour'],
                     'representId' => $data['representId'],
                 ]);
 
                 $represent = Represent::create([
                     'userId' => $data['representId'],
-                    'reservationId' => $data['id'],
+                    'transferzId' => $data['id'],
                     'choferId' => $data['userId']
                 ]);
                 return $reservation;
               }
               if($data['representId'] != null){
                 $reservation->update([
-                    'clientId' => $data['clientId'],
+                   
                     'status' => 'REPRESENTANTE',
                     'vehicleId' => $data['vehicleId'],
-                    'min_KM' => $data['min_KM'],
-                    'suitcases' => $data['suitcases'],
-                    'numPeople' => $data['numPeople'],
-                    'total_cost' => $data['total_cost'],
-                    'numServcice' => $data['numServcice'],
                     'userId' => $data['userId'],
-                    'arrivalDate' => $data['arrivalDate'],
-                    'hour' => $data['hour'],
                     'representId' => $data['representId'],
                 ]);
                 return $reservation;
               }
             $reservation->update([
-                'clientId' => $data['clientId'],
+                
                 'status' => 'ASIGNADO',
                 'vehicleId' => $data['vehicleId'],
-                'min_KM' => $data['min_KM'],
-                'suitcases' => $data['suitcases'],
-                'numPeople' => $data['numPeople'],
-                'total_cost' => $data['total_cost'],
-                'numServcice' => $data['numServcice'],
                 'userId' => $data['userId'],
-                'arrivalDate' => $data['arrivalDate'],
-                'hour' => $data['hour'],
                 'representId' => null,
             ]);
             return $reservation;
@@ -97,18 +75,10 @@ class EditReservation extends EditRecord
             $reservation->update([
                 'status' => 'REPRESENTANTE',
                 'vehicleId' =>$data['vehicleId'],
-                'clientId' => $data['clientId'],
-                'min_KM' => $data['min_KM'],
-                'suitcases' => $data['suitcases'],
-                'numPeople' => $data['numPeople'],
-                'total_cost' => $data['total_cost'],
-                'numServcice' => $data['numServcice'],
                 'userId' => $data['userId'],
-                'arrivalDate' => $data['arrivalDate'],
-                'hour' => $data['hour'],
                 'representId' => $data['representId'],
             ]);
-            $represent = Represent::where('reservationId', $data['id'])->first();
+            $represent = Represent::where('transferzId', $data['id'])->first();
 
             if ($represent) {
                 // Si se encontró un registro, actualizar sus campos
@@ -120,7 +90,7 @@ class EditReservation extends EditRecord
                 // Si no se encontró ningún registro, crear uno nuevo
                 Represent::create([
                     'userId' => $data['representId'],
-                    'reservationId' => $data['id'],
+                    'transferzId' => $data['id'],
                     'choferId' => $data['userId']
                 ]);
             }
@@ -130,15 +100,7 @@ class EditReservation extends EditRecord
         $reservation->update([
             'status' => 'SIN ASIGNAR',
             'vehicleId' => null,
-            'clientId' => $data['clientId'],
-            'min_KM' => $data['min_KM'],
-            'suitcases' => $data['suitcases'],
-            'numPeople' => $data['numPeople'],
-            'total_cost' => $data['total_cost'],
-            'numServcice' => $data['numServcice'],
             'userId' => null,
-            'arrivalDate' => $data['arrivalDate'],
-            'hour' => $data['hour'],
             'representId' => $data['representId'],
         ]);
 
@@ -147,12 +109,12 @@ class EditReservation extends EditRecord
 
     protected function afterSave(): void
     {
-        $reservation = $this->getResource()::getModel()::latest()->first();
+        $transfers = $this->getResource()::getModel()::latest()->first();
         $data = $this->record;
 
-        if ($reservation->userId !== null) {
+        if ($transfers->userId !== null) {
 
-            $userId = $reservation->userId;
+            $userId = $transfers->userId;
 
             $user = User::find($userId);
 
@@ -161,14 +123,14 @@ class EditReservation extends EditRecord
                     ->success()
                     ->title('Nueva Reservacion')
                     ->body('Reservacion asignado al chofer : ' . $user->name)
-                    ->actions([
-                        Action::make('ver')->url(
-                            ReservationResource::getUrl('index', ['record' => $data])
-                        )
-                            ->button()
-                            ->markAsRead()
+                    // ->actions([
+                    //     Action::make('ver')->url(
+                    //         TransferzResource::getUrl('index', ['record' => $data])
+                    //     )
+                    //         ->button()
+                    //         ->markAsRead()
 
-                    ])
+                    // ])
                     ->sendToDatabase($user);
                
             } else {
@@ -178,5 +140,4 @@ class EditReservation extends EditRecord
             // dd("No se envió ninguna notificación porque userId es nulo");
         }
     }
-    
 }

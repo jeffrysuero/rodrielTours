@@ -55,14 +55,6 @@ class ReservationResource extends Resource
             ->pluck('users.name', 'users.id')
             ->toArray();
 
-
-        // $vehicle = Vehicle::all()->mapWithKeys(function ($vehicles) {
-        //     $user = User::where('id', $vehicles->userId)->first();
-        //     return [$vehicles->id => $vehicles->marca . ' - ' . $vehicles->modelo . ' - ' . $user->name];
-        // })->toArray();
-
-
-
         /** generator the number the servcie*/
 
         $letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
