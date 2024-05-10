@@ -28,6 +28,7 @@ class Transferz extends Model
         'comments',
         'vehicle_category',
         'partner_reference',
+        'status',
         'userId',
         'vehicleId',
         
