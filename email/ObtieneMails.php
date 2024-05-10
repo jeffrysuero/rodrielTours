@@ -19,9 +19,9 @@ class ObtieneMails
     function obtenerAsuntosDelMails()
     {
         $servername = '34.174.63.119';
-        $username = 'dbe5qgcomzzgcg';
-        $password = 'u2aflvpvotnxz';
-        $database = 'administrador';
+        $username = 'u2aflvpvotnxz';
+        $password = 'administrador';
+        $database = 'dbe5qgcomzzgcg';
 
         // Crear conexión
         $conn = new mysqli($servername, $username, $password, $database);
