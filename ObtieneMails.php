@@ -3,14 +3,10 @@
 
 class ObtieneMails
 {
-
-    //usuario de gmail, email a donde deseamos conectarnos
-    // var $user = "developjeff04@gmail.com";
-    var $user = 'developjeff04@gmail.com';
+    var $user = 'serviciosrodrieltours@gmail.com';
     //password de nuestro email
-    var $password = 'xgle xmaf xvua znkv';
-    //inforrmación necesaria para conectarnos al INBOX de gmail,
-    //incluye el servidor, el puerto 993 que es para imap, e indicamos que no valide con ssl
+    var $password = 'unlr csfe ctfp gkfg';
+
     var $mailbox = "{imap.gmail.com:993/imap/ssl/novalidate-cert}INBOX";
 
     //var $fecha = "01-MAR-2015"; //desde que fecha sincronizara

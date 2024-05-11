@@ -26,7 +26,7 @@ class TransferzResource extends Resource
     protected static ?string $model = Transferz::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
-    protected static ?string $navigationLabel = 'Transferz';
+    protected static ?string $navigationLabel = 'Viajes';
     public static function form(Form $form): Form
     {
         $vehicles = Vehicle::all()->map(function ($vehicle) {
