@@ -3,9 +3,9 @@
 
 class ObtieneMails
 {
-    var $user = 'serviciosrodrieltours@gmail.com';
+    var $user = '';
     //password de nuestro email
-    var $password = 'unlr csfe ctfp gkfg';
+    var $password = '';
 
     var $mailbox = "{imap.gmail.com:993/imap/ssl/novalidate-cert}INBOX";
 
@@ -14,10 +14,10 @@ class ObtieneMails
     //metodo que realiza todo el trabajo
     function obtenerAsuntosDelMails()
     {
-        $servername = '34.174.63.119';
-        $username = 'u2aflvpvotnxz';
-        $password = 'administrador';
-        $database = 'dbe5qgcomzzgcg';
+        $servername = '';
+        $username = '';
+        $password = '';
+        $database = '';
 
         // Crear conexión
         $conn = new mysqli($servername, $username, $password, $database);
