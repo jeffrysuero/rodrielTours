@@ -57,7 +57,7 @@ class ClientResource extends Resource
                                     ->maxValue(15)
                                     ->maxLength(255),
                                 Forms\Components\TextInput::make('num_air')->label('Numero del Vuelo')
-                                    ->required()
+                                   
                                     ->maxLength(255),
                             ])
                     ]),
