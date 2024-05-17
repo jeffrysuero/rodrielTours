@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('lastName');
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->string('phone');
             $table->text('airport')->nullable();
             $table->text('hotel')->nullable();
-            $table->dateTime('arrivalDate')->nullable();
+            $table->string('arrivalDate')->nullable();
             $table->string('num_air')->nullable();
             $table->timestamps();
         });

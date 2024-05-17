@@ -353,7 +353,17 @@ class ReservationResource extends Resource
                         ->searchable(),
 
                     Tables\Columns\TextColumn::make('numPeople')
-                        ->icon('heroicon-m-user-group')
+                        ->icon('heroicon-m-user')
+                        ->iconColor('success')
+                        ->searchable(),
+
+                        Tables\Columns\TextColumn::make('client.numChildren')
+                        ->icon('heroicon-m-users')
+                        ->iconColor('success')
+                        ->searchable(),
+
+                        Tables\Columns\TextColumn::make('client.numInfant')
+                        ->icon('heroicon-m-face-smile')
                         ->iconColor('success')
                         ->searchable(),
 
