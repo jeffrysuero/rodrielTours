@@ -136,7 +136,7 @@ class ReservationResource extends Resource
                                 Forms\Components\TextInput::make('suitcases')->label('Maletas')
                                     ->required()
                                     ->numeric(),
-                                Forms\Components\TextInput::make('numPeople')->label('Numero de Persona')
+                                Forms\Components\TextInput::make('numPeople')->label('Numero de Adulto')
                                     ->required()
                                     ->numeric(),
 
@@ -200,11 +200,11 @@ class ReservationResource extends Resource
                         ->icon('heroicon-m-document-minus')
                         ->iconColor('success')->alignCenter()
                         ->searchable(),
-                    Tables\Columns\TextColumn::make('client.airport')
+                    Tables\Columns\TextColumn::make('airport')
                         ->icon('heroicon-m-paper-airplane')
                         ->iconColor('primary'),
                     Tables\Columns\TextColumn::make('hotel')->icon('heroicon-m-building-office')->iconColor('primary'),
-                    Tables\Columns\TextColumn::make('client.arrivalDate')
+                    Tables\Columns\TextColumn::make('arrivalDate')
                         ->icon('heroicon-m-clock')
                         ->iconColor('primary'),
 
