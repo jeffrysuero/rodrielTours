@@ -116,7 +116,8 @@ class UserResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                     ExportBulkAction::make()
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');;
     }
 
 

@@ -73,16 +73,16 @@ class ReservationResource extends Resource
         /**  */
 
         $modelRole = DB::table('model_has_roles')
-        ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-        ->join('users', 'model_has_roles.model_id', '=', 'users.id')
-        ->where('roles.name', 'Representante')
-        ->select('users.*', 'roles.name as role')
-        ->get()->toArray();
+            ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+            ->join('users', 'model_has_roles.model_id', '=', 'users.id')
+            ->where('roles.name', 'Representante')
+            ->select('users.*', 'roles.name as role')
+            ->get()->toArray();
 
-    $modelRoleOptions = [];
-    foreach ($modelRole as $user) {
-        $modelRoleOptions[$user->id] = $user->name;
-    }
+        $modelRoleOptions = [];
+        foreach ($modelRole as $user) {
+            $modelRoleOptions[$user->id] = $user->name;
+        }
         return $form
             ->schema([
                 Group::make()
@@ -119,11 +119,12 @@ class ReservationResource extends Resource
                                 TimePicker::make('hour')
                                     ->prefixIcon('heroicon-m-check-circle')
                                     ->Format('h:m:m A')
-                                    ->prefixIconColor('success')
+                                    ->prefixIconColor('success'),
 
-
-
-
+                                Forms\Components\TextInput::make('num_air')->label('Numero del Vuelo')
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('numInfant')->label('Numero de Infantes de (0-2 años)')->numeric()
+                                    ->maxLength(255),
                             ])
                     ]),
                 Group::make()
@@ -138,21 +139,48 @@ class ReservationResource extends Resource
                                 Forms\Components\TextInput::make('numPeople')->label('Numero de Persona')
                                     ->required()
                                     ->numeric(),
-                                    
+
                                 Forms\Components\TextInput::make('total_cost')->label('Costo Total')
                                     ->required()
                                     ->numeric(),
 
-                                    Select::make('representId')
+                                Select::make('representId')
                                     ->label('Representante')
                                     // ->required()
                                     ->searchable()
                                     ->noSearchResultsMessage('Cliente no encontrado')
                                     ->options($modelRoleOptions),
 
-                                Forms\Components\Hidden::make('numServcice')->default($numeroServicioConLetra)
+                                Forms\Components\Hidden::make('numServcice')->default($numeroServicioConLetra),
+
+                                Forms\Components\TextInput::make('numChildren')->label('Numero de niños de (2-12 años)')->numeric()
+                                    ->maxLength(255),
+                                Forms\Components\DatePicker::make('Datellegada')
+                                    ->displayFormat('d/m/Y')
+                                    ->label('Fecha de llegada'),
+                                   
                             ])
                     ]),
+
+                Group::make()
+                    ->schema([
+                        Section::make('')
+                            ->schema([
+                                Forms\Components\MarkdownEditor::make('airport')->label('Aeropuerto')
+                                    ->required()
+                                    ->maxLength(255),
+                            ])
+                    ]),
+                Group::make()
+                    ->schema([
+                        Section::make('')
+                            ->schema([
+
+                                Forms\Components\MarkdownEditor::make('hotel')->label('Hotel')
+                                    ->required()
+                                    ->maxLength(255)
+                            ])
+                    ])
 
             ]);
     }
@@ -175,12 +203,12 @@ class ReservationResource extends Resource
                     Tables\Columns\TextColumn::make('client.airport')
                         ->icon('heroicon-m-paper-airplane')
                         ->iconColor('primary'),
-                    Tables\Columns\TextColumn::make('client.hotel')->icon('heroicon-m-building-office')->iconColor('primary'),
+                    Tables\Columns\TextColumn::make('hotel')->icon('heroicon-m-building-office')->iconColor('primary'),
                     Tables\Columns\TextColumn::make('client.arrivalDate')
                         ->icon('heroicon-m-clock')
                         ->iconColor('primary'),
 
-                    Tables\Columns\TextColumn::make('client.num_air')
+                    Tables\Columns\TextColumn::make('num_air')
                         ->icon('heroicon-m-document-text')
                         ->iconColor('primary')
                         ->searchable(),
@@ -245,7 +273,7 @@ class ReservationResource extends Resource
                         ->searchable(),
 
 
-                        Tables\Columns\TextColumn::make('represent.users.name')
+                    Tables\Columns\TextColumn::make('represent.users.name')
                         ->icon('heroicon-m-user-circle')
                         ->iconColor('success')
                         ->searchable()
@@ -300,11 +328,11 @@ class ReservationResource extends Resource
                             return in_array($record->status, ['COMPLETADO', 'ASIGNADO', 'SIN ASIGNAR', 'REPRESENTANTE', 'DESP_CHOFER']);
                         }),
 
-                        Tables\Actions\RepresenChofer::make()
+                    Tables\Actions\RepresenChofer::make()
                         ->label('Estoy Aqui')
                         ->recordTitle('Esta seguro de que has llegado')
                         ->hidden(static function ($record) {
-        
+
                             return $record->arrive !== 0;
                         }),
                 ])
@@ -329,15 +357,15 @@ class ReservationResource extends Resource
                         ->icon('heroicon-m-document-minus')
                         ->iconColor('success')->alignCenter()
                         ->searchable(),
-                    Tables\Columns\TextColumn::make('client.airport')
+                    Tables\Columns\TextColumn::make('airport')
                         ->icon('heroicon-m-paper-airplane')
                         ->iconColor('primary'),
-                    Tables\Columns\TextColumn::make('client.hotel')->icon('heroicon-m-building-office')->iconColor('primary'),
-                    Tables\Columns\TextColumn::make('client.arrivalDate')
+                    Tables\Columns\TextColumn::make('hotel')->icon('heroicon-m-building-office')->iconColor('primary'),
+                    Tables\Columns\TextColumn::make('arrivalDate')
                         ->icon('heroicon-m-clock')
                         ->iconColor('primary'),
 
-                    Tables\Columns\TextColumn::make('client.num_air')
+                    Tables\Columns\TextColumn::make('num_air')
                         ->icon('heroicon-m-document-text')
                         ->iconColor('primary')
                         ->searchable(),
@@ -357,12 +385,12 @@ class ReservationResource extends Resource
                         ->iconColor('success')
                         ->searchable(),
 
-                        Tables\Columns\TextColumn::make('client.numChildren')
+                    Tables\Columns\TextColumn::make('numChildren')
                         ->icon('heroicon-m-users')
                         ->iconColor('success')
                         ->searchable(),
 
-                        Tables\Columns\TextColumn::make('client.numInfant')
+                    Tables\Columns\TextColumn::make('numInfant')
                         ->icon('heroicon-m-face-smile')
                         ->iconColor('success')
                         ->searchable(),
@@ -397,7 +425,7 @@ class ReservationResource extends Resource
 
                     Tables\Columns\TextColumn::make('users.phone')->icon('heroicon-m-phone')->iconColor('primary')->searchable()->alignCenter(),
 
-                    Tables\Columns\TextColumn::make('arrivalDate')
+                    Tables\Columns\TextColumn::make('Datellegada')
                         ->icon('heroicon-m-calendar-days')
                         ->iconColor('primary')
                         ->searchable(),
@@ -409,7 +437,7 @@ class ReservationResource extends Resource
 
 
 
-                        Tables\Columns\TextColumn::make('represent.users.name')
+                    Tables\Columns\TextColumn::make('represent.users.name')
                         ->icon('heroicon-m-user-circle')
                         ->iconColor('success')
                         ->searchable()
@@ -456,13 +484,13 @@ class ReservationResource extends Resource
                         ->recordTitle('Esta seguro de Iniciar el Viaje')
                         ->failureNotificationTitle('no tiene vehiculo asignado')
                         ->hidden(static function ($record) {
-                            return in_array($record->status, ['COMPLETADO', 'REPRESENTANTE','EN PROGRESO', 'SIN ASIGNAR']);
+                            return in_array($record->status, ['COMPLETADO', 'REPRESENTANTE', 'EN PROGRESO', 'SIN ASIGNAR']);
                         }),
                     Tables\Actions\CompletedService::make()
                         ->label('Terminar Servicio')
                         ->recordTitle('Esta seguro de Terminar el Viaje')
                         ->hidden(static function ($record) {
-                            return in_array($record->status, ['COMPLETADO', 'ASIGNADO','REPRESENTANTE', 'SIN ASIGNAR']);
+                            return in_array($record->status, ['COMPLETADO', 'ASIGNADO', 'REPRESENTANTE', 'SIN ASIGNAR']);
                         }),
 
 

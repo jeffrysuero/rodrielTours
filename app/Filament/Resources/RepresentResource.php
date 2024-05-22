@@ -244,7 +244,8 @@ class RepresentResource extends Resource
                     // Tables\Actions\DeleteBulkAction::make(),
                     // ExportBulkAction::make()
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array

@@ -14,11 +14,5 @@ class Client extends Model
         'lastName',
         'email',
         'phone',
-        'address',
-        'airport',
-        'hotel',
-        'arrivalDate',
-        'num_air',
-        'arrivalDate'
     ];
 }

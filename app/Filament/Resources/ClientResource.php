@@ -37,8 +37,7 @@ class ClientResource extends Resource
                                 Forms\Components\TextInput::make('lastName')->label('Apellidos')
                                     ->required()
                                     ->maxLength(255),
-                                Forms\Components\DateTimePicker::make('arrivalDate')->label('Fecha de llegada')
-                                    ->required(),
+                             
                             ]),
                     ]),
                 Group::make()
@@ -56,31 +55,10 @@ class ClientResource extends Resource
                                     ->required()
                                     ->maxValue(15)
                                     ->maxLength(255),
-                                Forms\Components\TextInput::make('num_air')->label('Numero del Vuelo')
-                                   
-                                    ->maxLength(255),
+                            
                             ])
                     ]),
 
-                Group::make()
-                    ->schema([
-                        Section::make('')
-                            ->schema([
-                                Forms\Components\MarkdownEditor::make('airport')->label('Aeropuerto')
-                                    ->required()
-                                    ->maxLength(255),
-                            ])
-                    ]),
-                Group::make()
-                    ->schema([
-                        Section::make('')
-                            ->schema([
-
-                                Forms\Components\MarkdownEditor::make('hotel')->label('Hotel')
-                                    ->required()
-                                    ->maxLength(255)
-                            ])
-                    ])
             ]);
     }
 
@@ -96,10 +74,7 @@ class ClientResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('phone')->label('Telefono')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('airport')->label('Aero Puerto')
-                    ->searchable(),
-                    Tables\Columns\TextColumn::make('num_air')->label('Numero de Vuelo')
-                    ->searchable(),
+              
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -124,7 +99,8 @@ class ClientResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                     ExportBulkAction::make()
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array

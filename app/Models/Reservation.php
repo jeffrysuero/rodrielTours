@@ -26,7 +26,15 @@ class Reservation extends Model
         'userId',
         'arrivalDate',
         'hour',
-        'representId'
+        'representId',
+
+        'airport',
+        'hotel',
+        'arrivalDate',
+        'num_air',
+        'numInfant',
+        'numChildren',
+        'Datellegada'
     ];
 
     public function client()

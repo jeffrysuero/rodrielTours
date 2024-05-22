@@ -70,10 +70,10 @@ class CreateReservation extends CreateRecord
                     ->sendToDatabase($user);
                
             } else {
-                dd("Usuario no encontrado");
+                // dd("Usuario no encontrado");
             }
         } else {
-            dd("No se envió ninguna notificación porque userId es nulo");
+            // dd("No se envió ninguna notificación porque userId es nulo");
         }
     }
 }
