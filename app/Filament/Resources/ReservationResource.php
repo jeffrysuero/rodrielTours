@@ -467,7 +467,8 @@ class ReservationResource extends Resource
                         ->label('Visit link')
                         ->icon('heroicon-m-arrow-top-right-on-square')
                         ->color('gray')
-                        ->url(fn (Reservation $record): string => '#' . urlencode($record->url)),
+                        ->url(fn (Reservation $record): string => route('trajectory', ['id' => $record->id])),
+
                     Tables\Actions\EditAction::make()
                         ->hidden(static function ($record) {
                             return $record->status === 'COMPLETADO';

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Reservation;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect('dashboard/login');
 });
+
+Route::get('/trajectory/{id}', function($id){
+    $reservation = Reservation::find($id);
+    $airport = $reservation->airport;
+    $hotel = $reservation->hotel;
+    return view('trajectory', compact('airport', 'hotel'));
+})->name('trajectory');
+
