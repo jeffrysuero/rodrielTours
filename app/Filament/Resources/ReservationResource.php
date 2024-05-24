@@ -354,6 +354,10 @@ class ReservationResource extends Resource
 
             return $table->columns([
                 Tables\Columns\Layout\Panel::make([
+                    Tables\Columns\TextColumn::make('page')
+                        ->icon('heroicon-m-globe-alt')
+                        ->iconColor('success')->alignCenter()
+                        ->searchable(),
                     Tables\Columns\TextColumn::make('numServcice')
                         ->icon('heroicon-m-document-minus')
                         ->iconColor('success')->alignCenter()

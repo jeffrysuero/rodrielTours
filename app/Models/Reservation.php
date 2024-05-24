@@ -34,7 +34,8 @@ class Reservation extends Model
         'num_air',
         'numInfant',
         'numChildren',
-        'Datellegada'
+        'Datellegada',
+        'page'
     ];
 
     public function client()
