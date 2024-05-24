@@ -17,7 +17,7 @@ class ListRepresents extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()->label('Asignar servicio a Representante')->icon('heroicon-m-plus-circle'),
+            // Actions\CreateAction::make()->label('Asignar servicio a Representante')->icon('heroicon-m-plus-circle'),
         ];
     }
 

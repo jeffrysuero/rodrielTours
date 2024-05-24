@@ -113,15 +113,15 @@ class RepresentResource extends Resource
                     ->icon('heroicon-m-document-minus')
                     ->iconColor('success')->alignCenter()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('reservations.client.airport')
+                Tables\Columns\TextColumn::make('reservations.airport')
                     ->icon('heroicon-m-paper-airplane')
                     ->iconColor('primary'),
-                Tables\Columns\TextColumn::make('reservations.client.hotel')->icon('heroicon-m-building-office')->iconColor('primary'),
-                Tables\Columns\TextColumn::make('reservations.client.arrivalDate')
+                Tables\Columns\TextColumn::make('reservations.hotel')->icon('heroicon-m-building-office')->iconColor('primary'),
+                Tables\Columns\TextColumn::make('reservations.arrivalDate')
                     ->icon('heroicon-m-clock')
                     ->iconColor('primary'),
 
-                Tables\Columns\TextColumn::make('reservations.client.num_air')
+                Tables\Columns\TextColumn::make('reservations.num_air')
                     ->icon('heroicon-m-document-text')
                     ->iconColor('primary')
                     ->searchable(),
@@ -167,11 +167,11 @@ class RepresentResource extends Resource
 
                 Tables\Columns\TextColumn::make('reservations.arrivalDate')->icon('heroicon-m-calendar-days')->iconColor('primary')->searchable(),
 
-                Tables\Columns\TextColumn::make('.users.name')
-                ->icon('heroicon-m-user-circle')
-                ->iconColor('success')
-                ->searchable()
-                ->alignEnd(),
+                // Tables\Columns\TextColumn::make('.users.name')
+                // ->icon('heroicon-m-user-circle')
+                // ->iconColor('success')
+                // ->searchable()
+                // ->alignEnd(),
 
                 Tables\Columns\TextColumn::make('users.name')
                 ->icon('heroicon-m-user-circle')
@@ -245,7 +245,7 @@ class RepresentResource extends Resource
                     // ExportBulkAction::make()
                 ]),
             ])
-            ->defaultSort('created_at', 'desc');
+            ->defaultSort('created_at', 'desc');;
     }
 
     public static function getRelations(): array
@@ -266,21 +266,6 @@ class RepresentResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-
-        // $user = User::all();
-
-        // $modelRole = DB::table('model_has_roles')->get()->mapWithKeys(function ($role) {
-        //     $user = User::find($role->model_id); 
-        //     $roles = DB::table('roles')->where('id', $role->role_id)->first();
-        //     return [$user->id => ['user' => $user->name, 'roles' => $roles->name]];
-        // })->toArray();
-
-        // $modelRole = DB::table('model_has_roles')
-        //     ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-        //     ->join('users', 'model_has_roles.model_id', '=', 'users.id')
-        //     ->where('roles.name', 'Administrador') 
-        //     ->select('users.*', 'roles.name as role') 
-        //     ->get();
 
         $user = Auth()->user();
         if ($user->roles[0]->name === 'Administrador') {
