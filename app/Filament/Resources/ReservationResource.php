@@ -166,7 +166,7 @@ class ReservationResource extends Resource
                     ->schema([
                         Section::make('')
                             ->schema([
-                                Forms\Components\MarkdownEditor::make('airport')->label('Aeropuerto')
+                                Forms\Components\MarkdownEditor::make('airport')->label('Origen')
                                     ->required()
                                     ->maxLength(255),
                             ])
@@ -176,7 +176,7 @@ class ReservationResource extends Resource
                         Section::make('')
                             ->schema([
 
-                                Forms\Components\MarkdownEditor::make('hotel')->label('Hotel')
+                                Forms\Components\MarkdownEditor::make('hotel')->label('Destinos')
                                     ->required()
                                     ->maxLength(255)
                             ])
