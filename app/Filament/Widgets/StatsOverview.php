@@ -10,6 +10,7 @@ use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Carbon\Carbon;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
+use Illuminate\Support\Facades\DB;
 
 class StatsOverview extends BaseWidget
 {
@@ -52,10 +53,17 @@ class StatsOverview extends BaseWidget
             $data[] = $monthlyTotal[$i] ?? 0;
         }
 
+        $chofer = DB::table('model_has_roles')
+         ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+         ->join('users', 'model_has_roles.model_id', '=', 'users.id')
+         ->where('roles.name', 'Conductores')
+         ->pluck('users.id')->count();
 
         if ($user->roles[0]->name === 'Administrador') {
+        
             return [
-                Stat::make('Total Choferes ', User::where('name', '!=', 'admin')->count())
+                Stat::make('Total Choferes ', $chofer)
+
                     ->description('Choferes')
                     ->descriptionIcon('heroicon-m-arrow-trending-up')
                     ->color('primary')
@@ -100,7 +108,7 @@ class StatsOverview extends BaseWidget
 
         if ($user->roles[0]->name === 'Operador') {
             return [
-                Stat::make('Total Choferes ', User::where('name', '!=', 'admin')->count())
+                Stat::make('Total Choferes ', $chofer)
                     ->description('Choferes')
                     ->descriptionIcon('heroicon-m-arrow-trending-up')
                     ->color('primary')
@@ -144,7 +152,7 @@ class StatsOverview extends BaseWidget
 
         if ($user->roles[0]->name === 'Super Admin') {
             return [
-                Stat::make('Total Choferes ', User::where('name', '!=', 'admin')->count())
+                Stat::make('Total Choferes ', $chofer)
                     ->description('Choferes')
                     ->descriptionIcon('heroicon-m-arrow-trending-up')
                     ->color('primary')
