@@ -55,13 +55,13 @@ class RepresentResource extends Resource
         //     return [$vehicles->id => $vehicles->marca . ' - ' . $vehicles->modelo . ' - ' . $user->name];
         // })->toArray();
         $conductores = DB::table('model_has_roles')
-        ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-        ->join('users', 'model_has_roles.model_id', '=', 'users.id')
-        ->where('roles.name', 'Conductores')
-        ->pluck('users.name', 'users.id')
-        ->toArray();
+            ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+            ->join('users', 'model_has_roles.model_id', '=', 'users.id')
+            ->where('roles.name', 'Conductores')
+            ->pluck('users.name', 'users.id')
+            ->toArray();
 
-        $reservation = Reservation::where('status', 'SIN ASIGNAR','ASIGNADO')->get();
+        $reservation = Reservation::where('status', 'SIN ASIGNAR', 'ASIGNADO')->get();
         $reservationOptions = $reservation->pluck('numServcice', 'id')->toArray();
 
         return $form
@@ -84,7 +84,7 @@ class RepresentResource extends Resource
                                     ->noSearchResultsMessage('Chofer no encontrado')
                                     ->options($conductores),
 
-                                    Select::make('vehicleId')
+                                Select::make('vehicleId')
                                     ->label('Vehiculo')
                                     ->required()
                                     ->searchable()
@@ -163,7 +163,7 @@ class RepresentResource extends Resource
                     ->iconColor('primary')
                     ->searchable(),
 
-                 Tables\Columns\TextColumn::make('reservations.users.phone')->icon('heroicon-m-phone')->iconColor('primary')->searchable(),
+                Tables\Columns\TextColumn::make('reservations.users.phone')->icon('heroicon-m-phone')->iconColor('primary')->searchable(),
 
                 Tables\Columns\TextColumn::make('reservations.arrivalDate')->icon('heroicon-m-calendar-days')->iconColor('primary')->searchable(),
 
@@ -174,10 +174,10 @@ class RepresentResource extends Resource
                 // ->alignEnd(),
 
                 Tables\Columns\TextColumn::make('users.name')
-                ->icon('heroicon-m-user-circle')
-                ->iconColor('success')
-                ->searchable()
-                ->alignEnd(),
+                    ->icon('heroicon-m-user-circle')
+                    ->iconColor('success')
+                    ->searchable()
+                    ->alignEnd(),
                 // Tables\Columns\TextColumn::make('reservations.status')->icon('heroicon-m-swatch')
                 //     ->iconColor('success'),
             ]),
@@ -284,10 +284,13 @@ class RepresentResource extends Resource
                 $query->where('status', 'REPRESENTANTE')->orWhere('status', 'DESP_CHOFER');;
             });
         }
+        // if ($user->roles[0]->name === 'Representante') {
+        //     return parent::getEloquentQuery()->whereHas('reservations', function ($query) {
+        //         $user = Auth()->user();
+        //         $query->where('status', 'REPRESENTANTE')->where('userId', $user->id);
+        //     });
+        // }
 
-        // return parent::getEloquentQuery()->whereHas('reservations', function ($query) {
-            //     $query->where('status', 'REPRESENTANTE')->where('userId', $user->id);
-            // });
         $user = Auth()->user();
         return parent::getEloquentQuery()->where('userId', $user->id);
     }

@@ -33,7 +33,7 @@ class EditReservation extends EditRecord
 
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
-        // dd($data['representId']);
+        //  dd($data);
         $reservation = Reservation::all()->where('id', $data['id'])->first();
         if ($reservation && $data['userId'] != null) {
             if ($data['representId'] === null) {
@@ -52,7 +52,7 @@ class EditReservation extends EditRecord
                     'hour' => $data['hour'],
                     'representId' => $data['representId'],
 
-                    'arrive' => $data['arrive'],
+                    // 'arrive' => $data['arrive'],
                     'airport' => $data['airport'],
                     'hotel' => $data['hotel'],
                     'num_air' => $data['num_air'],
@@ -83,7 +83,7 @@ class EditReservation extends EditRecord
                     'hour' => $data['hour'],
                     'representId' => $data['representId'],
 
-                    'arrive' => $data['arrive'],
+                    // 'arrive' => $data['arrive'],
                     'airport' => $data['airport'],
                     'hotel' => $data['hotel'],
                     'num_air' => $data['num_air'],
@@ -91,6 +91,22 @@ class EditReservation extends EditRecord
                     'numInfant' => $data['numInfant'],
                     'Datellegada' => $data['Datellegada'],
                 ]);
+                $represent = Represent::where('reservationId', $data['id'])->first();
+
+                if ($represent) {
+                    // Si se encontró un registro, actualizar sus campos
+                    $represent->update([
+                        'userId' => $data['representId'],
+                        'choferId' => $data['userId']
+                    ]);
+                } else {
+                    // Si no se encontró ningún registro, crear uno nuevo
+                    Represent::create([
+                        'userId' => $data['representId'],
+                        'reservationId' => $data['id'],
+                        'choferId' => $data['userId']
+                    ]);
+                }
                 return $reservation;
             }
             $reservation->update([
@@ -107,7 +123,7 @@ class EditReservation extends EditRecord
                 'hour' => $data['hour'],
                 'representId' => null,
 
-                'arrive' => $data['arrive'],
+                // 'arrive' => $data['arrive'],
                 'airport' => $data['airport'],
                 'hotel' => $data['hotel'],
                 'num_air' => $data['num_air'],
@@ -132,7 +148,7 @@ class EditReservation extends EditRecord
                 'hour' => $data['hour'],
                 'representId' => $data['representId'],
 
-                'arrive' => $data['arrive'],
+                // 'arrive' => $data['arrive'],
                 'airport' => $data['airport'],
                 'hotel' => $data['hotel'],
                 'num_air' => $data['num_air'],
@@ -173,7 +189,7 @@ class EditReservation extends EditRecord
             'hour' => $data['hour'],
             'representId' => $data['representId'],
 
-            'arrive' => $data['arrive'],
+            // 'arrive' => $data['arrive'],
             'airport' => $data['airport'],
             'hotel' => $data['hotel'],
             'num_air' => $data['num_air'],
