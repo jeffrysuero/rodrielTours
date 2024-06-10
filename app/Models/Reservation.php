@@ -56,6 +56,10 @@ class Reservation extends Model
     {
         return $this->hasOne(Represent::class, 'reservationId', 'id');
     }
+    public function getClientFullNameAttribute()
+{
+    return $this->client->name . ' ' . $this->client->lastName ;
+}
 
     public static function getStatusOptions()
     {
