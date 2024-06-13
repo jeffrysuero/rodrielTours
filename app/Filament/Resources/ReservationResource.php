@@ -362,10 +362,11 @@ class ReservationResource extends Resource
                         ->icon('heroicon-m-document-minus')
                         ->iconColor('success')->alignCenter()
                         ->searchable(),
+                    Tables\Columns\TextColumn::make('airport')->icon('heroicon-m-building-office')->iconColor('primary'),
+
                     Tables\Columns\TextColumn::make('hotel')
                         ->icon('heroicon-m-paper-airplane')
                         ->iconColor('primary'),
-                    Tables\Columns\TextColumn::make('airport')->icon('heroicon-m-building-office')->iconColor('primary'),
                     Tables\Columns\TextColumn::make('arrivalDate')
                         ->icon('heroicon-m-clock')
                         ->iconColor('primary'),
@@ -400,8 +401,8 @@ class ReservationResource extends Resource
                         ->iconColor('success')
                         ->searchable(),
 
-                 
-                        Tables\Columns\TextColumn::make('client_full_name')
+
+                    Tables\Columns\TextColumn::make('client_full_name')
                         ->label('Client Name')
                         ->icon('heroicon-m-user-circle')
                         ->iconColor('success')
@@ -558,7 +559,7 @@ class ReservationResource extends Resource
         $user = Auth()->user();
         // $vehicle = Vehicle::all()->where('userId', $user->id)->first();
         // dd($vehicle);
-      
+
         if ($user->roles[0]->name === 'Administrador') {
             return parent::getEloquentQuery();
         }
