@@ -200,10 +200,11 @@ class ReservationResource extends Resource
                         ->icon('heroicon-m-document-minus')
                         ->iconColor('success')->alignCenter()
                         ->searchable(),
+                        Tables\Columns\TextColumn::make('airport')->icon('heroicon-m-building-office')->iconColor('primary'),
                     Tables\Columns\TextColumn::make('hotel')
                         ->icon('heroicon-m-paper-airplane')
                         ->iconColor('primary'),
-                    Tables\Columns\TextColumn::make('airport')->icon('heroicon-m-building-office')->iconColor('primary'),
+                    
                     Tables\Columns\TextColumn::make('arrivalDate')
                         ->icon('heroicon-m-clock')
                         ->iconColor('primary'),
