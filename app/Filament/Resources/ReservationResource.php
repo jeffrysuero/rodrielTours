@@ -166,19 +166,19 @@ class ReservationResource extends Resource
                     ->schema([
                         Section::make('')
                             ->schema([
-                                Forms\Components\MarkdownEditor::make('airport')->label('Origen')
+                                Forms\Components\MarkdownEditor::make('hotel')->label('Origen')
                                     ->required()
-                                    ->maxLength(255),
+                                    ->maxLength(255)
                             ])
                     ]),
                 Group::make()
                     ->schema([
                         Section::make('')
                             ->schema([
-
-                                Forms\Components\MarkdownEditor::make('hotel')->label('Destinos')
-                                    ->required()
-                                    ->maxLength(255)
+                                Forms\Components\MarkdownEditor::make('airport')->label('Destinos')
+                                ->required()
+                                ->maxLength(255),
+                                
                             ])
                     ])
 
@@ -365,15 +365,15 @@ class ReservationResource extends Resource
                         ->searchable(),
 
                     Tables\Columns\TextColumn::make('hotel')
-                        ->icon('heroicon-m-paper-airplane')
+                        ->icon('heroicon-m-building-office')
                         ->iconColor('primary'),
 
-                    Tables\Columns\TextColumn::make('airport')->icon('heroicon-m-building-office')->iconColor('primary'),
+                    Tables\Columns\TextColumn::make('airport')->icon('heroicon-m-paper-airplane')->iconColor('primary'),
 
 
-                    Tables\Columns\TextColumn::make('arrivalDate')
-                        ->icon('heroicon-m-clock')
-                        ->iconColor('primary'),
+                    // Tables\Columns\TextColumn::make('arrivalDate')
+                    //     ->icon('heroicon-m-clock')
+                    //     ->iconColor('primary'),
 
                     Tables\Columns\TextColumn::make('num_air')
                         ->icon('heroicon-m-document-text')
