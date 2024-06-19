@@ -196,6 +196,14 @@ class ReservationResource extends Resource
         if ($user->roles[0]->name === 'Conductores') {
             return $table->columns([
                 Tables\Columns\Layout\Panel::make([
+                    ImageColumn::make('page')
+                    ->defaultImageUrl(url('/images/logoRodrielB.png'))
+                    ->height(90)
+                    ->alignCenter()
+                    ->getStateUsing(function ($record) {
+                        return $record->page ? url('/images/logoRodrielB.png') : url('/images/LogoDark.png');
+                    }),
+                    
                     Tables\Columns\TextColumn::make('numServcice')
                         ->icon('heroicon-m-document-minus')
                         ->iconColor('success')->alignCenter()
@@ -355,10 +363,14 @@ class ReservationResource extends Resource
 
             return $table->columns([
                 Tables\Columns\Layout\Panel::make([
-                    Tables\Columns\TextColumn::make('page')
-                        ->icon('heroicon-m-globe-alt')
-                        ->iconColor('success')->alignCenter()
-                        ->searchable(),
+                    ImageColumn::make('page')
+                    ->defaultImageUrl(url('/images/logoRodrielB.png'))
+                    ->height(90)
+                    ->alignCenter()
+                    ->getStateUsing(function ($record) {
+                        return $record->page ? url('/images/logoRodrielB.png') : url('/images/LogoDark.png');
+                    }),
+                    
                     Tables\Columns\TextColumn::make('numServcice')
                         ->icon('heroicon-m-document-minus')
                         ->iconColor('success')->alignCenter()

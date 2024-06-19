@@ -20,6 +20,7 @@ use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Actions\Action;
 
 class TransferzResource extends Resource
 {
@@ -116,7 +117,8 @@ class TransferzResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return $table->columns([
+        return $table
+        ->columns([
             Tables\Columns\Layout\Panel::make([
                 Tables\Columns\TextColumn::make('numServcice')
                     ->icon('heroicon-m-document-minus')
