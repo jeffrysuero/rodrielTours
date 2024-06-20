@@ -208,14 +208,14 @@ class ReservationResource extends Resource
                         ->icon('heroicon-m-document-minus')
                         ->iconColor('success')->alignCenter()
                         ->searchable(),
-                    Tables\Columns\TextColumn::make('airport')->icon('heroicon-m-building-office')->iconColor('primary'),
-                    Tables\Columns\TextColumn::make('hotel')
+                    Tables\Columns\TextColumn::make('hotel')->icon('heroicon-m-building-office')->iconColor('primary'),
+                    Tables\Columns\TextColumn::make('airport')
                         ->icon('heroicon-m-paper-airplane')
                         ->iconColor('primary'),
 
-                    Tables\Columns\TextColumn::make('arrivalDate')
-                        ->icon('heroicon-m-clock')
-                        ->iconColor('primary'),
+                    // Tables\Columns\TextColumn::make('arrivalDate')
+                    //     ->icon('heroicon-m-clock')
+                    //     ->iconColor('primary'),
 
                     Tables\Columns\TextColumn::make('num_air')
                         ->icon('heroicon-m-document-text')
@@ -237,7 +237,8 @@ class ReservationResource extends Resource
                         ->iconColor('success')
                         ->searchable(),
 
-                    Tables\Columns\TextColumn::make('client.name')
+                        Tables\Columns\TextColumn::make('client_full_name')
+                        ->label('Client Name')
                         ->icon('heroicon-m-user-circle')
                         ->iconColor('success')
                         ->searchable(),
@@ -287,6 +288,7 @@ class ReservationResource extends Resource
                         ->iconColor('success')
                         ->searchable()
                         ->alignEnd(),
+                  
 
                     Tables\Columns\TextColumn::make('status')->icon('heroicon-m-swatch')
                         ->iconColor('success'),
@@ -382,10 +384,6 @@ class ReservationResource extends Resource
 
                     Tables\Columns\TextColumn::make('airport')->icon('heroicon-m-paper-airplane')->iconColor('primary'),
 
-
-                    // Tables\Columns\TextColumn::make('arrivalDate')
-                    //     ->icon('heroicon-m-clock')
-                    //     ->iconColor('primary'),
 
                     Tables\Columns\TextColumn::make('num_air')
                         ->icon('heroicon-m-document-text')
