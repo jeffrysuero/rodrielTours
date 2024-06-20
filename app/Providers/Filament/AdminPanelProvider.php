@@ -39,6 +39,7 @@ class AdminPanelProvider extends PanelProvider
             ->font('Poppins')
             ->defaultAvatarProvider(BoringAvatarsProvider::class)
             ->brandLogo(asset('images/LogoDark.png'))
+            ->favicon(asset('images/LogoDark.png'))
             ->brandLogoHeight('5rem')
             ->favicon(asset('images/Logo.png'))
             
