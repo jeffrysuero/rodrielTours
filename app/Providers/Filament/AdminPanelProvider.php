@@ -40,7 +40,7 @@ class AdminPanelProvider extends PanelProvider
             ->defaultAvatarProvider(BoringAvatarsProvider::class)
             ->brandLogo(asset('images/LogoDark.png'))
             ->favicon(asset('images/LogoDark.png'))
-            ->brandLogoHeight('5rem')
+            ->brandLogoHeight(fn () => auth()->check() ? '5rem' : '11rem')
             ->favicon(asset('images/Logo.png'))
             
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
